@@ -4,7 +4,7 @@ import {
     Distance_km,
     DistanceAndProbability,
     Probability,
-    TimeAndProbability
+    HourlyTimeAndProbability
 } from "./types";
 
 type DistanceKmString = `${Distance_km}km`
@@ -18,7 +18,7 @@ export const distanceStringToDistanceKm = (distanceString: DistanceKmString): Di
 }
 
 
-function parseCarArrivalData(data: TimeAndProbability): TimeAndProbability {
+function parseCarArrivalData(data: HourlyTimeAndProbability): HourlyTimeAndProbability {
     return data;
 }
 
@@ -34,6 +34,6 @@ function parseCarDemandData(data: DistanceStringAndProbability): DistanceAndProb
     return result;
 }
 
-export const carArrivalProbabilities: TimeAndProbability = parseCarArrivalData(carArrivalData);
-export const carDemandProbabilities: DistanceAndProbability = parseCarDemandData(carDemandData);
+export const pCarArrivalData: HourlyTimeAndProbability = parseCarArrivalData(carArrivalData);
+export const pCarDemandData: DistanceAndProbability = parseCarDemandData(carDemandData);
 

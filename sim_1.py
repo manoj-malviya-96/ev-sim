@@ -57,7 +57,7 @@ for interval in range(total_intervals_per_year):
     charge_points_intervals = np.maximum(0, charge_points_intervals - 1)
 
     for i, cp in enumerate(charge_points_intervals):
-        # check if its free, and if car arrived
+        # check if it's free, and if car arrived
         if cp == 0 and did_car_arrive_to_charge_point(interval % 24):
             distance_km = get_distance()
             intervals_needed_to_charge = num_of_intervals_per_hr * (
