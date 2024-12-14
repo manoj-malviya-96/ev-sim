@@ -1,24 +1,25 @@
-import React from 'react'
+import React from "react";
 
 interface ButtonProps {
-    label?: string
-    icon?: string
-    onClick: () => void
+    label?: string;
+    icon?: string;
+    disabled?: boolean;
+    onClick: () => void;
 }
 
-
-const Button: React.FC<ButtonProps> = ({label, icon, onClick}) => {
+const Button: React.FC<ButtonProps> = ({label, icon, disabled = false, onClick}) => {
     return (
         <button
             onClick={onClick}
-            className="p-2 bg-primary bg-opacity-50 hover:bg-opacity-100 active:scale-95
-                        rounded-full flex items-center spacing-2"
+            disabled={disabled}
+            className={`bg-primary bg-opacity-50 hover:bg-opacity-100 active:scale-95
+                  px-4 py-2 rounded-full flex items-center spacing-2
+                  ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
         >
             {icon && <i className={icon}/>}
-            {label && <span className="ml-2">{label}</span>}
+            {label && <span>{label}</span>}
         </button>
-    )
-}
+    );
+};
 
-export default Button
-
+export default Button;
