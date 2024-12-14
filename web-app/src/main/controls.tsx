@@ -32,8 +32,7 @@ const Controls = () => {
                 />
             </Group>
             <Button
-                label="Run Simulation"
-                icon="fa fa-plus"
+                label="Submit"
                 onClick={() => console.log("Button clicked!")}
             />
         </div>
