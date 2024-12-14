@@ -20,6 +20,8 @@ const NumberSlider: React.FC<NumberSliderProps> = ({
                                                        className = "",
                                                    }) => {
     
+    // Note: This is a copy of the NumberInput component with the input type changed to range
+    // Todo: Refactor to use a single component with a prop for the input type
     const [value, setValue] = React.useState<number>(initialValue);
     const handleChange = (e: any) => {
         const num = Number(e.target.value);
@@ -31,7 +33,7 @@ const NumberSlider: React.FC<NumberSliderProps> = ({
     
     useEffect(() => {
         onChange(value);
-    }, [value]);
+    }, [value, onChange]);
     
     return (
         <div className={`flex flex-col ${className}`}>

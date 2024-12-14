@@ -30,7 +30,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     
     useEffect(() => {
         onChange(value);
-    }, [value]);
+    }, [value, onChange]);
     
     return (
         <div className={`flex flex-col ${className}`}>
