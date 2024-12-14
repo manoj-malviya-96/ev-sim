@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 
-interface NumberSlider {
+interface NumberSliderProps {
     initialValue: number;
     label?: string;
     onChange: (value: number) => void;
@@ -10,15 +10,15 @@ interface NumberSlider {
     className?: string;
 }
 
-const NumberSlider: React.FC<NumberSlider> = ({
-                                                  label,
-                                                  initialValue,
-                                                  onChange,
-                                                  min = 0,
-                                                  max = 100,
-                                                  step = 1,
-                                                  className = "",
-                                              }) => {
+const NumberSlider: React.FC<NumberSliderProps> = ({
+                                                       label,
+                                                       initialValue,
+                                                       onChange,
+                                                       min = 0,
+                                                       max = 100,
+                                                       step = 1,
+                                                       className = "",
+                                                   }) => {
     
     const [value, setValue] = React.useState<number>(initialValue);
     const handleChange = (e: any) => {
