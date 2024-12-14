@@ -4,9 +4,9 @@ module.exports = {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: '#4e73dc', // Primary base color (e.g., a blue shade)
-                    light: '#5a74ae',   // Optional lighter version
-                    dark: '#4e73dc',    // Optional darker version
+                    DEFAULT: '#4edc6f', // Primary base color (e.g., a blue shade)
+                    light: '#4b9c5e',   // Optional lighter version
+                    dark: '#56ed78',    // Optional darker version
                 },
             },
         },
