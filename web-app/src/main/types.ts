@@ -20,16 +20,9 @@ export interface TimeAndProbability {
     [time: HourlyTimeString]: Probability
 }
 
-type DistanceKmString = `${Distance_km}km`
-
-export interface DistanceStringAndProbability {
-    [distanceString: DistanceKmString]: Probability
+export interface DistanceAndProbability {
+    [distance: Distance_km]: Probability
 }
-
-export const distanceStringToDistanceKm = (distanceString: DistanceKmString): Distance_km => {
-    return parseFloat(distanceString.replace('km', ''));
-}
-
 
 export const validateProbability = (probability: Probability): boolean => {
     return probability >= 0 && probability <= 1;
