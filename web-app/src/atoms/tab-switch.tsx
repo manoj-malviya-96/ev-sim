@@ -30,7 +30,7 @@ const TabSwitchButton: React.FC<TabSwitchButtonProps> = ({tabs, className, onSwi
                                 "bg-primary text-white" :
                                 "bg-gray-100 text-gray-700"}
                         ${index === 0 ? "rounded-l-md" : index === tabs.length - 1 ? "rounded-r-md" : ""}
-                        hover:bg-primary hover:text-white transition`}
+                        hover:bg-gray-400 transition`}
                     >
                         {tab.label}
                     </button>
