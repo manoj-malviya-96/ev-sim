@@ -1,5 +1,4 @@
 export interface ChargePoint {
-    id: number;
     power: Power_Kw;
     intervalsLeft: number;
 }

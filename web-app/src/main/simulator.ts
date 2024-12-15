@@ -21,7 +21,6 @@ export interface SimulationResults {
 export const createUniformChargePoints = (numberOfChargePoints: number, power: Power_Kw): ChargePoints => {
     return Array.from({length: numberOfChargePoints}, (index) => {
         return {
-            id: index,
             power: power,
             intervalsLeft: 0,
         } as ChargePoint
@@ -106,8 +105,19 @@ export class SimulationController {
         return 0;
     }
     
+    private resetChargePoints(chargePoints: ChargePoints) {
+        chargePoints.forEach((cp) => {
+            cp.intervalsLeft = 0;
+        });
+    }
+    
+    private resetChargePointsForEveryInterval(chargePoints: ChargePoints) {
+        chargePoints.forEach((cp) => {
+            cp.intervalsLeft = Math.max(0, cp.intervalsLeft - 1);
+        });
+    }
+    
     public simulate() {
-        const powerHistory = [];
         const intervalsInHour = 60 / this.interval_min;
         const carArrivalPbData = parseCarArrivalData(this.rawCarArrivalData,
             intervalsInHour,
@@ -115,17 +125,19 @@ export class SimulationController {
         const totalIntervals = this.yearsToSimulate * 365 * 24 * intervalsInHour;
         const chargePoints = this.getChargePoints();
         
-        for (let i = 0; i < totalIntervals; i++) {
+        const powerHistory = [];
+        
+        for (let interval = 0; interval < totalIntervals; interval++) {
             // Reset the charge points
-            chargePoints.forEach((chargePoint) => {
-                chargePoint.intervalsLeft = Math.max(0, chargePoint.intervalsLeft - 1);
-            });
-            const intervalNumOfTheDay = i % (
+            this.resetChargePointsForEveryInterval(chargePoints);
+            
+            const intervalNumOfTheDay = interval % (
                 24 * intervalsInHour
             );
+            
             // Check if a car arrives
-            for (let j = 0; j < chargePoints.length; j++) {
-                const cp = chargePoints[j];
+            for (let cpIdx = 0; cpIdx < chargePoints.length; cpIdx++) {
+                const cp = chargePoints[cpIdx];
                 
                 if (cp.intervalsLeft === 0 &&
                     carArrivalPbData[intervalNumOfTheDay] > Math.random()) {
@@ -150,13 +162,16 @@ export class SimulationController {
         
         const actualMaxPowerUsed = Math.max(...powerHistory);
         const theoryMaxPower = chargePoints.reduce((acc, cp) => acc + cp.power, 0);
-        this.onFinishedSimulation({
+        const results: SimulationResults = {
             totalEnergySpent: powerHistory.reduce((acc, power) => acc + power, 0),
             theoreticalMaxPowerUsed: theoryMaxPower,
             actualMaxPowerUsed: actualMaxPowerUsed,
             concurrency: actualMaxPowerUsed / theoryMaxPower,
             powerHistory: powerHistory,
-        } as SimulationResults);
+        }
+        
+        this.onFinishedSimulation(results);
+        
     }
 }
     
