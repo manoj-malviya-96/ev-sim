@@ -50,7 +50,7 @@ const NumberSlider: React.FC<NumberSliderProps> = ({
             />
             <div className="flex justify-between text-sm mt-1">
                 <span>{min}</span>
-                <span>{value}</span>
+                <span className='text-primary font-bold'>{value}</span>
                 <span>{max}</span>
             </div>
         </div>
