@@ -125,7 +125,7 @@ export class SimulationController {
     
     public setChargePointsAdvance() {
     }; // TODO
-
+    
     public addUpdateListener(listener: () => void) {
         this.updateListeners.add(listener);
     }
@@ -273,19 +273,5 @@ export class SimulationController {
         
     }
 }
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
