@@ -1,10 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const {readData, writeData} = require("./temp-storage");
+
 
 // Todo can we use TS for this? Right now for simplicity I am using JS.
 
 const app = express();
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(bodyParser.json());
 
 let database = readData(); // Load stored data
