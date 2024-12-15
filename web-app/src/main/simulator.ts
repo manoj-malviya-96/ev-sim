@@ -282,12 +282,6 @@ export class SimulationController {
     }
     
     
-    private resetChargePointsForEveryInterval(chargePoints: ChargePoints) {
-        chargePoints.forEach((cp) => {
-            cp.intervalsLeft = Math.max(0, cp.intervalsLeft - 1);
-        });
-    }
-    
     private sendResultsToBackend(inputId: string, results: SimulationResults) {
         const resultsConfig = {
             inputId: inputId,
@@ -334,7 +328,9 @@ export class SimulationController {
         
         for (let interval = 0; interval < totalIntervals; interval++) {
             // Reset the charge points
-            this.resetChargePointsForEveryInterval(chargePoints);
+            chargePoints.forEach((cp) => {
+                cp.intervalsLeft = Math.max(0, cp.intervalsLeft - 1);
+            });
             
             const intervalNumOfTheDay = interval % (
                 hoursInADay * intervalsInHour
