@@ -14,11 +14,12 @@ const _Button: React.FC<ButtonProps> = ({label, icon, disabled = false, danger =
         <button
             onClick={onClick}
             disabled={disabled}
-            className={`${danger ? 'bg-red-400' : 'bg-primary'} text-white bg-opacity-70 hover:bg-opacity-100 active:scale-95
+            className={`${danger ? 'bg-transparent' : 'bg-primary'}
+                text-white hover:scale-105 active:scale-95 transition duration-300
                   ${label ? 'px-4' : 'px-2'} py-1 rounded-full flex items-center justify-center spacing-2
                   ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
         >
-            {icon && <i className={icon}/>}
+            {icon && <i className={`${icon} ${danger ? 'text-red-600': ''}`}/>}
             {label && <span>{label}</span>}
         </button>
     );

@@ -44,7 +44,7 @@ const _NumberSlider: React.FC<NumberSliderProps> = ({
     }, [initialValue]);
     
     return (
-        <div className={`flex flex-col ${className}`}>
+        <div className={`flex flex-col ${className} justify-center`}>
             {label && <label className="text-sm font-medium mb-1">{label}</label>}
             <input
                 type="range"
