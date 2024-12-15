@@ -33,8 +33,9 @@ const Stats: React.FC<StatsProps> = ({label, icon, value, info, children, severi
     
     
     return (
-        <div className={`flex flex-col items-center shadow p-4 cursor-pointer
-                        rounded-md ${computeBgColor(severity)} bg-opacity-50 ${className}`}
+        <div className={`flex flex-col items-center shadow p-4 cursor-pointer bg-white backdrop-blur-lg
+                        rounded-md ${computeBgColor(severity)} bg-opacity-50
+                        ${className}`}
              onClick={() => setShowChildren(!showChildren)}>
             <span className="text-sm text-gray-800 items-center flex flex-row gap-2">
                 {icon && <i className={icon}/>}

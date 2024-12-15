@@ -86,6 +86,8 @@ const getCumulativeForCarDemand = (carDemand: DistanceAndProbability): DistanceA
     return result;
 }
 
+
+
 export class SimulationController {
     public chargePointsProps: UniformChargePoints;
     public carPowerRating: EnergyConsumptionRate_kWH_per_100km;
@@ -303,7 +305,6 @@ export class SimulationController {
         }
         
         this.onFinishedSimulation(results);
-        
         this.sendResultsToBackend(inputId, results);
     }
 }

@@ -35,7 +35,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     
     return (
         <div className={`flex flex-col ${className}`}>
-            {label && <label className="text-sm font-medium mb-1">{label}</label>}
+            {label && <label className="text-sm font-medium">{label}</label>}
             <input
                 type="number"
                 value={value}
@@ -43,7 +43,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
                 min={min}
                 max={max}
                 step={step}
-                className="p-2 border rounded"
+                className="p-2 border rounded w-full h-full"
             />
         </div>
     );

@@ -22,7 +22,7 @@ const ChargePointContributionPlot = ({eachChargePoint}: { eachChargePoint: Perce
     };
     return <PlotlyPlotter
         minimalView={true}
-        className={'w-full h-40'}
+        className={'w-full h-20'}
         dataTrace={[dataTrace]}
     />;
 }
@@ -50,7 +50,8 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
     
     
     return (
-        <div className={`w-full h-full p-2
+        results &&
+        <div className={`w-fit h-full p-2
                         max-h-screen overflow-auto gap-4 flex flex-col
                         ${className}`}>
             <div className={'flex flex-row w-full h-fit gap-3 '}>
@@ -59,7 +60,6 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
                 <Stats label="Max Charge Expected (kwH)" value={actualMaxPower}/>
                 <Stats label="Concurrency" icon='fas fa-money-bills' value={concurrency}/>
             </div>
-            
             <Stats label="Average Charge Point % Contribution"
                    value={averageChargePointContribution ? averageChargePointContribution : 0}
                    icon='fas fa-gas-pump'
