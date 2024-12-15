@@ -17,7 +17,6 @@ export interface UniformChargePoints {
 // but for now, this is good enough I think.
 export type Energy_KwH = number;
 export type Power_Kw = number;
-export type EnergyConsumptionRate_kWH_per_km = number;
 export type EnergyConsumptionRate_kWH_per_100km = number;
 export type Probability = number;
 export type Percentage = number;

@@ -9,6 +9,7 @@ const EVSim = () => {
     const controller = new SimulationController((results: SimulationResults) => {
         setResults(results);
     });
+    controller.updateFromLastInput();
     
     return (
         <div className="w-screen h-screen flex flex-row p-8 gap-8"

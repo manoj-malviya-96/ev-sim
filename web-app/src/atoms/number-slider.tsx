@@ -32,6 +32,10 @@ const NumberSlider: React.FC<NumberSliderProps> = ({
     }
     
     useEffect(() => {
+        setValue(initialValue);
+    }, [initialValue]);
+    
+    useEffect(() => {
         onChange(value);
     }, [value, onChange]);
     

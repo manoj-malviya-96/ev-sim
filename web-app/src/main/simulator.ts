@@ -1,11 +1,21 @@
 import {
-    ChargePoint, ChargePoints, DistanceAndProbability,
-    Energy_KwH, EnergyConsumptionRate_kWH_per_100km,
-    EnergyConsumptionRate_kWH_per_km,
-    Minutes, Percentage,
-    Power_Kw, Probability,
+    ChargePoint,
+    ChargePoints,
+    daysInAYear,
+    Distance_km,
+    DistanceAndProbability,
+    Energy_KwH,
+    EnergyConsumptionRate_kWH_per_100km,
     HourlyTimeAndProbability,
-    Years, Distance_km, Hours, hoursInADay, daysInAYear, minutesInAnHour, UniformChargePoints
+    Hours,
+    hoursInADay,
+    Minutes,
+    minutesInAnHour,
+    Percentage,
+    Power_Kw,
+    Probability,
+    UniformChargePoints,
+    Years
 } from "./types";
 import {pCarArrivalData, pCarDemandData} from "./data-parser";
 
@@ -24,7 +34,7 @@ export interface SimulationResults {
 export interface SimulationInput {
     uniform_NumChargePoints: number;
     uniform_ChargePointPower: Power_Kw;
-    carPowerRating: EnergyConsumptionRate_kWH_per_km;
+    carPowerRating: EnergyConsumptionRate_kWH_per_100km;
     carArrivalProbabilityMultiplier: Percentage;
 }
 
@@ -83,26 +93,30 @@ const getCumulativeForCarDemand = (carDemand: DistanceAndProbability): DistanceA
 
 export class SimulationController {
     public chargePointsProps: UniformChargePoints;
-    public carPowerRating: EnergyConsumptionRate_kWH_per_km;
-    public carArrivalProbabilityMultiplier: number;
+    public carPowerRating: EnergyConsumptionRate_kWH_per_100km;
+    public carArrivalProbabilityMultiplier: Percentage;
     private readonly interval_min: Minutes;
     private readonly yearsToSimulate: Years;
     private readonly rawCarArrivalData: HourlyTimeAndProbability;
     private readonly carDemandCmProbability: DistanceAndProbability = [];
     private readonly onFinishedSimulation: (results: SimulationResults) => void;
+    private updateListeners: Set<() => void> = new Set();
     
     constructor(onFinishedSimulation: (results: SimulationResults) => void) {
         this.chargePointsProps = {
             numberOfChargePoints: 20,
             power: 11,
         };
-        this.carPowerRating = 0.18;
-        this.carArrivalProbabilityMultiplier = 1.0;
+        this.carPowerRating = 18.0;
+        this.carArrivalProbabilityMultiplier = 100.0;
         this.rawCarArrivalData = pCarArrivalData;
         this.carDemandCmProbability = getCumulativeForCarDemand(pCarDemandData);
         this.interval_min = 15;
         this.yearsToSimulate = 1;
         this.onFinishedSimulation = onFinishedSimulation;
+        this.updateListeners = new Set();
+        
+        this.updateFromLastInput();
     }
     
     public setChargePointsSimple(uniformChargePoints: UniformChargePoints) {
@@ -111,22 +125,39 @@ export class SimulationController {
     
     public setChargePointsAdvance() {
     }; // TODO
-    
-    public setCarPowerRating(power: EnergyConsumptionRate_kWH_per_100km) {
-        this.carPowerRating = power / 100;
+
+    public addUpdateListener(listener: () => void) {
+        this.updateListeners.add(listener);
     }
     
-    public setCarArrivalProbabilityMultiplier(multiplier: Percentage) {
-        this.carArrivalProbabilityMultiplier = multiplier / 100;
+    public removeUpdateListener(listener: () => void) {
+        this.updateListeners.delete(listener);
     }
     
+    private notifyInputUpdate() {
+        this.updateListeners.forEach((listener) => listener());
+    }
+    
+    public updateFromLastInput() {
+        this.getLastInput().then((lastInput) => {
+            if (lastInput) {
+                this.chargePointsProps = {
+                    numberOfChargePoints: lastInput.uniform_NumChargePoints,
+                    power: lastInput.uniform_ChargePointPower,
+                };
+                this.carPowerRating = lastInput.carPowerRating;
+                this.carArrivalProbabilityMultiplier = lastInput.carArrivalProbabilityMultiplier;
+                this.notifyInputUpdate();
+            }
+        });
+    }
     
     private async sendInputsToBackend() {
         const inputConfig = {
             uniform_NumChargePoints: this.chargePointsProps.numberOfChargePoints,
             uniform_ChargePointPower: this.chargePointsProps.power || 0,
-            carPowerRating: this.carPowerRating * 100, // Convert back to per 100km
-            carArrivalProbabilityMultiplier: this.carArrivalProbabilityMultiplier * 100, // Convert back to percentage
+            carPowerRating: this.carPowerRating,
+            carArrivalProbabilityMultiplier: this.carArrivalProbabilityMultiplier,
         };
         
         try {
@@ -149,21 +180,14 @@ export class SimulationController {
         }
     }
     
-    private async applyLastInput() {
+    private async getLastInput() {
         try {
             const response = await fetch(`${API_URL}/inputs`);
             if (!response.ok) {
                 throw new Error(`Failed to get last input: ${response.statusText}`);
             }
             const inputs = await response.json();
-            const lastInput = inputs[inputs.length - 1];
-            console.log("Last input from backend:", lastInput);
-            this.chargePointsProps = {
-                numberOfChargePoints: lastInput.uniform_NumChargePoints,
-                power: lastInput.uniform_ChargePointPower,
-            }
-            this.carPowerRating = lastInput.carPowerRating;
-            this.carArrivalProbabilityMultiplier = lastInput.carArrivalProbabilityMultiplier;
+            return inputs[inputs.length - 1];
         }
         catch (error) {
             console.error("Error getting last input from backend:", error);
@@ -194,7 +218,7 @@ export class SimulationController {
         const intervalsInHour = minutesInAnHour / this.interval_min;
         const carArrivalPbData = parseCarArrivalData(this.rawCarArrivalData,
             intervalsInHour,
-            this.carArrivalProbabilityMultiplier);
+            this.carArrivalProbabilityMultiplier / 100);
         const totalIntervals = this.yearsToSimulate * daysInAYear * hoursInADay * intervalsInHour;
         const chargePoints = constructChargePoints(this.chargePointsProps);
         
@@ -217,7 +241,7 @@ export class SimulationController {
                     
                     // Car arrives at the charge point
                     const distance: Distance_km = this.getRandomCarDemand();
-                    const energyRequired: Energy_KwH = distance * this.carPowerRating;
+                    const energyRequired: Energy_KwH = distance * this.carPowerRating / 100;
                     const timeToCharge: Hours = energyRequired / cp.power;
                     cp.intervalsLeft = timeToCharge * intervalsInHour;
                 }

@@ -14,7 +14,6 @@ interface ControlsProps {
 
 const Controls: React.FC<ControlsProps> = ({controller}) => {
     
-    
     const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
     
     const [numberOfChargePoints, setNumberOfChargePoints] =
@@ -24,10 +23,10 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
         useState<Power_Kw>(controller.chargePointsProps.power);
     
     const [carPowerRating, setCarPowerRating] =
-        useState<EnergyConsumptionRate_kWH_per_100km>(100 * controller.carPowerRating);
+        useState<EnergyConsumptionRate_kWH_per_100km>(controller.carPowerRating);
     
     const [carArrivalProbabilityMultiplier, setCarArrivalProbabilityMultiplier] =
-        useState<Percentage>(100 * controller.carArrivalProbabilityMultiplier);
+        useState<Percentage>(controller.carArrivalProbabilityMultiplier);
     
     useEffect(() => {
         controller.setChargePointsSimple({
@@ -37,12 +36,27 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
     }, [controller, numberOfChargePoints, chargePointPower]);
     
     useEffect(() => {
-        controller.setCarPowerRating(carPowerRating);
+        controller.carPowerRating= carPowerRating;
     }, [controller, carPowerRating]);
     
     useEffect(() => {
-        controller.setCarArrivalProbabilityMultiplier(carArrivalProbabilityMultiplier);
+        controller.carArrivalProbabilityMultiplier = carArrivalProbabilityMultiplier;
     }, [controller, carArrivalProbabilityMultiplier]);
+    
+    // Sync states with controller when backend updates occur
+    useEffect(() => {
+        const updateStatesFromController = () => {
+            console.log("Updating states from controller", controller);
+            setNumberOfChargePoints(controller.chargePointsProps.numberOfChargePoints);
+            setChargePointPower(controller.chargePointsProps.power);
+            setCarPowerRating(controller.carPowerRating);
+            setCarArrivalProbabilityMultiplier(controller.carArrivalProbabilityMultiplier);
+        };
+        
+        controller.addUpdateListener(updateStatesFromController);
+        
+        return () => controller.removeUpdateListener(updateStatesFromController);
+    }, [controller]);
     
     
     return (

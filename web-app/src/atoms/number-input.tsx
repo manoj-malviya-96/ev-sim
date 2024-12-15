@@ -29,6 +29,10 @@ const NumberInput: React.FC<NumberInputProps> = ({
     }
     
     useEffect(() => {
+        setValue(initialValue);
+    }, [initialValue]);
+    
+    useEffect(() => {
         onChange(value);
     }, [value, onChange]);
     
