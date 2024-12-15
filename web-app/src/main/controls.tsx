@@ -1,11 +1,11 @@
 import Group from "../atoms/group";
 import NumberInput from "../atoms/number-input";
 import NumberSlider from "../atoms/number-slider";
-import Button from "../atoms/button";
 import React, {useEffect, useState} from "react";
 import {EnergyConsumptionRate_kWH_per_100km, Percentage, Power_Kw} from "./types";
 import {SimulationController} from "./simulator";
 import TabSwitchButton from "../atoms/tab-switch";
+import Button from "../atoms/button";
 
 
 interface ControlsProps {
@@ -14,17 +14,26 @@ interface ControlsProps {
 
 const Controls: React.FC<ControlsProps> = ({controller}) => {
     
-    const [resultsOutdated, setResultsOutdated] = useState<boolean>(true);
-    const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
-    const [numberOfChargePoints, setNumberOfChargePoints] = useState<number>(20);
-    const [chargePointPower, setChargePointPower] = useState<Power_Kw>(11);
-    const [carPowerRating, setCarPowerRating] = useState<EnergyConsumptionRate_kWH_per_100km>(18);
-    const [carArrivalProbabilityMultiplier, setCarArrivalProbabilityMultiplier] =
-        useState<Percentage>(100);
     
+    const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
+    
+    const [numberOfChargePoints, setNumberOfChargePoints] =
+        useState<number>(controller.chargePointsProps.numberOfChargePoints);
+    
+    const [chargePointPower, setChargePointPower] =
+        useState<Power_Kw>(controller.chargePointsProps.power);
+    
+    const [carPowerRating, setCarPowerRating] =
+        useState<EnergyConsumptionRate_kWH_per_100km>(100 * controller.carPowerRating);
+    
+    const [carArrivalProbabilityMultiplier, setCarArrivalProbabilityMultiplier] =
+        useState<Percentage>(100 * controller.carArrivalProbabilityMultiplier);
     
     useEffect(() => {
-        controller.setChargePointsSimple(numberOfChargePoints, chargePointPower);
+        controller.setChargePointsSimple({
+            numberOfChargePoints: numberOfChargePoints,
+            power: chargePointPower,
+        });
     }, [controller, numberOfChargePoints, chargePointPower]);
     
     useEffect(() => {
@@ -35,17 +44,6 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
         controller.setCarArrivalProbabilityMultiplier(carArrivalProbabilityMultiplier);
     }, [controller, carArrivalProbabilityMultiplier]);
     
-    useEffect(() => {
-        setResultsOutdated(true);
-    }, [numberOfChargePoints, chargePointPower, carPowerRating, carArrivalProbabilityMultiplier]);
-    
-    useEffect(() => {
-        if (resultsOutdated) {
-            controller.simulate().then(() => {
-                setResultsOutdated(false);
-            });
-        }
-    }, [resultsOutdated, controller]);
     
     return (
         <div className="w-fit h-full flex flex-col gap-4 items-center">
@@ -95,6 +93,10 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
                     onChange={setCarPowerRating}
                 />
             </Group>
+            <Button
+                label="Submit"
+                onClick={() => controller.simulate()}
+            />
         </div>
     )
 }

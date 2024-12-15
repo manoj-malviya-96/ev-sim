@@ -5,6 +5,13 @@ export interface ChargePoint {
 
 export type ChargePoints = ChargePoint[];
 
+// Charge points can be constructed via two methods:
+// 1. Uniform number of charge points with uniform power
+export interface UniformChargePoints {
+    numberOfChargePoints: number;
+    power: Power_Kw;
+}
+
 
 // Strong types power units - can be better to define interplay like conversion from energy to power
 // but for now, this is good enough I think.

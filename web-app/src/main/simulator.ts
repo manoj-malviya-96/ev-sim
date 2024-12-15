@@ -82,9 +82,9 @@ const getCumulativeForCarDemand = (carDemand: DistanceAndProbability): DistanceA
 }
 
 export class SimulationController {
-    private chargePointsProps: UniformChargePoints;
-    private carPowerRating: EnergyConsumptionRate_kWH_per_km;
-    private carArrivalProbabilityMultiplier: number;
+    public chargePointsProps: UniformChargePoints;
+    public carPowerRating: EnergyConsumptionRate_kWH_per_km;
+    public carArrivalProbabilityMultiplier: number;
     private readonly interval_min: Minutes;
     private readonly yearsToSimulate: Years;
     private readonly rawCarArrivalData: HourlyTimeAndProbability;
@@ -107,7 +107,6 @@ export class SimulationController {
     
     public setChargePointsSimple(uniformChargePoints: UniformChargePoints) {
         this.chargePointsProps = uniformChargePoints;
-        this.sendInputsToBackend();
     };
     
     public setChargePointsAdvance() {
@@ -115,12 +114,10 @@ export class SimulationController {
     
     public setCarPowerRating(power: EnergyConsumptionRate_kWH_per_100km) {
         this.carPowerRating = power / 100;
-        this.sendInputsToBackend();
     }
     
     public setCarArrivalProbabilityMultiplier(multiplier: Percentage) {
         this.carArrivalProbabilityMultiplier = multiplier / 100;
-        this.sendInputsToBackend();
     }
     
     
@@ -146,8 +143,30 @@ export class SimulationController {
             }
             const savedInput = await response.json();
             console.log("Input saved to backend:", savedInput);
-        } catch (error) {
+        }
+        catch (error) {
             console.error("Error sending inputs to backend:", error);
+        }
+    }
+    
+    private async applyLastInput() {
+        try {
+            const response = await fetch(`${API_URL}/inputs`);
+            if (!response.ok) {
+                throw new Error(`Failed to get last input: ${response.statusText}`);
+            }
+            const inputs = await response.json();
+            const lastInput = inputs[inputs.length - 1];
+            console.log("Last input from backend:", lastInput);
+            this.chargePointsProps = {
+                numberOfChargePoints: lastInput.uniform_NumChargePoints,
+                power: lastInput.uniform_ChargePointPower,
+            }
+            this.carPowerRating = lastInput.carPowerRating;
+            this.carArrivalProbabilityMultiplier = lastInput.carArrivalProbabilityMultiplier;
+        }
+        catch (error) {
+            console.error("Error getting last input from backend:", error);
         }
     }
     
@@ -169,6 +188,9 @@ export class SimulationController {
     }
     
     public async simulate() {
+        
+        await this.sendInputsToBackend();
+        
         const intervalsInHour = minutesInAnHour / this.interval_min;
         const carArrivalPbData = parseCarArrivalData(this.rawCarArrivalData,
             intervalsInHour,
