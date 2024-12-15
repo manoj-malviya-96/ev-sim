@@ -78,7 +78,7 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
                 </Stats>
             </div>
             <div className={'flex flex-row h-fit items-center w-full'}>
-                <span className="text-lg text-gray-500 mr-4"> Average Charging Events </span>
+                <span className="text-md font-bold text-gray-500 mr-4"> Average Charging Events </span>
                 <Stats label="Daily Average"
                        value={eventCount.daily}/>
                 <Stats label="Weekly Average"
