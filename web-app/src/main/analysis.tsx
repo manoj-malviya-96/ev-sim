@@ -56,7 +56,7 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
         roundTo(eachChargePoint.reduce((acc, val) => acc + val, 0)
             / eachChargePoint.length, 2);
     
-    return ( results &&
+    return (
         <div className={`w-full h-full p-8 bg-white bg-opacity-20 border rounded-lg
                         max-h-screen overflow-auto flex flex-col gap-4
                         ${className}`}>

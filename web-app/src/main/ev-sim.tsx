@@ -14,9 +14,14 @@ const EVSim = () => {
     return (
         <div className="w-screen h-screen p-8">
             <h1 className="text-4xl font-bold text-center uppercase">EV Simulator</h1>
-            <div className="flex flex-row p-8 gap-8">
+            <div className="flex flex-row p-8 gap-8 items-center">
                 <Controls controller={controller}/>
-                <Analysis results={results}/>
+                {results && <Analysis results={results}/>}
+                {!results &&
+                    <div className="w-3/4 h-3/4">
+                        <p className="text-center text-2xl">No results yet, click on Submit</p>
+                    </div>
+                }
             </div>
         </div>
     );
