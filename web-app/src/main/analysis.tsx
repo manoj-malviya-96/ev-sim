@@ -13,11 +13,12 @@ interface AnalysisProps {
 
 
 const ChargePointContributionPlot = ({eachChargePoint}: { eachChargePoint: Percentage[] }) => {
+    //Todo in log scale to show the difference.
     const dataTrace: Partial<Plotly.Data> = {
         x: eachChargePoint.map((_, index) => index + 1),
         y: eachChargePoint,
         type: 'bar',
-        hovertemplate: 'charge point: %{x} | % contribution: %{y} <extra></extra>',
+        hovertemplate: '%{x} | Power : %{y} <extra></extra>',
         marker: {color: 'rgb(50, 50, 50)'}, // Can be extracted via tailwind.
     };
     return <PlotlyPlotter
@@ -60,13 +61,13 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
                         max-h-screen overflow-auto flex flex-col gap-4
                         ${className}`}>
             <div className={'grid grid-cols-2 gap-0 '}>
-                <Stats label="Total Charge Expected (kwH)" value={totalEnergySpent}
+                <Stats label="Total Charge Expected (KwH)" value={totalEnergySpent}
                        icon='fas fa-bolt'/>
-                <Stats label="Max Charge Expected (kwH)" value={actualMaxPower}>
+                <Stats label="Max Charge Expected (KwH)" value={actualMaxPower}>
                     <span className="text-sm text-gray-600 text-left w-full">
                         Concurrency (Max/Theoretical power) for this setup is {concurrency}</span>
                 </Stats>
-                <Stats label="Average Charge Point % Contribution"
+                <Stats label="Mean Power by Each Charge Point"
                        value={averageChargePointContribution ? averageChargePointContribution : 0}
                        icon='fas fa-gas-pump'
                        className={'w-full h-fit'}
@@ -77,7 +78,7 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
                 </Stats>
             </div>
             <div className={'flex flex-row h-fit items-center w-full'}>
-                
+                <span className="text-lg text-gray-500 mr-4"> Average Charging Events </span>
                 <Stats label="Daily Average"
                        value={eventCount.daily}/>
                 <Stats label="Weekly Average"

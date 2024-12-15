@@ -35,7 +35,7 @@ export interface SimulationResults {
     theoreticalMaxPowerUsed: Power_Kw;
     actualMaxPowerUsed: Power_Kw;
     concurrency: number; // Should be a percentage
-    eachChargePointContribution: Percentage[];
+    eachChargePointContribution: Power_Kw[];
     chargeEventAverage: ChargeEventCount;
 }
 
@@ -328,7 +328,7 @@ export class SimulationController {
         const chargePoints = constructChargePoints(this.chargePointsProps);
         
         const powerHistory = [];
-        const chargePointSnapshot_Energy = chargePoints.map(() => 0);
+        const chargePointSnapshot_Power = chargePoints.map(() => 0);
         const chargingEventsHistory = Array.from({length: totalIntervals}, () => 0);
         
         for (let interval = 0; interval < totalIntervals; interval++) {
@@ -362,7 +362,7 @@ export class SimulationController {
             let totalPowerUsedInInterval = 0;
             chargePoints.forEach((cp, idx) => {
                 if (cp.intervalsLeft > 0) {
-                    chargePointSnapshot_Energy[idx] += cp.power / intervalsInHour;
+                    chargePointSnapshot_Power[idx] += cp.power;
                     // Snapshot of power used by each charge point
                     totalPowerUsedInInterval += cp.power;
                 }
@@ -373,10 +373,6 @@ export class SimulationController {
         const totalEnergySpent: Energy_KwH = powerHistory.reduce((acc, power) => acc + power, 0) / intervalsInHour;
         const actualMaxPowerUsed = Math.max(...powerHistory);
         const theoryMaxPower = chargePoints.reduce((acc, cp) => acc + cp.power, 0);
-        const eachChargePointContribution = chargePointSnapshot_Energy.map((energy) => {
-            return roundTo(100 * energy / totalEnergySpent, 2); // Percentage
-        })
-        
         const eventAverages = getEventAverages(chargingEventsHistory, intervalsInHour);
         
         
@@ -385,7 +381,7 @@ export class SimulationController {
             theoreticalMaxPowerUsed: theoryMaxPower,
             actualMaxPowerUsed: actualMaxPowerUsed,
             concurrency: roundTo(actualMaxPowerUsed / theoryMaxPower, 2),
-            eachChargePointContribution: eachChargePointContribution,
+            eachChargePointContribution: chargePointSnapshot_Power,
             chargeEventAverage: eventAverages,
         }
         

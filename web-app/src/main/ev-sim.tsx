@@ -13,7 +13,7 @@ const EVSim = () => {
     
     return (
         <div className="w-screen h-screen p-8">
-            <h1 className="text-4xl font-bold text-center">EV Simulator</h1>
+            <h1 className="text-4xl font-bold text-center uppercase">EV Simulator</h1>
             <div className="flex flex-row p-8 gap-8">
                 <Controls controller={controller}/>
                 <Analysis results={results}/>
