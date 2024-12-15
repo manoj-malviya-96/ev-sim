@@ -104,7 +104,7 @@ const getEventAverages = (
             totalEvents += eventHistory.slice(start, end).reduce((sum, val) => sum + val, 0);
         }
         
-        return roundTo(totalEvents / numDays, 2);
+        return roundTo(totalEvents / numDays, 1);
     };
     
     const calculateWeeklyAverage = () => {
@@ -117,7 +117,7 @@ const getEventAverages = (
             totalEvents += eventHistory.slice(start, end).reduce((sum, val) => sum + val, 0);
         }
         
-        return roundTo(totalEvents / numWeeks, 2);
+        return roundTo(totalEvents / numWeeks, 1);
     };
     
     
@@ -129,7 +129,7 @@ const getEventAverages = (
             start = end;
             return total;
         });
-        return roundTo(monthlyTotals.reduce((sum, val) => sum + val, 0) / monthlyTotals.length, 2);
+        return roundTo(monthlyTotals.reduce((sum, val) => sum + val, 0) / monthlyTotals.length, 1);
     };
     
     const calculateYearlyAverage = () => {
@@ -142,7 +142,7 @@ const getEventAverages = (
             totalEvents += eventHistory.slice(start, end).reduce((sum, val) => sum + val, 0);
         }
         
-        return roundTo(totalEvents / numYears, 2);
+        return roundTo(totalEvents / numYears, 1);
     };
     
     
@@ -374,10 +374,10 @@ export class SimulationController {
         
         
         const results: SimulationResults = {
-            totalEnergySpent: roundTo(totalEnergySpent, 2),
+            totalEnergySpent: roundTo(totalEnergySpent, 1),
             theoreticalMaxPowerUsed: theoryMaxPower,
             actualMaxPowerUsed: actualMaxPowerUsed,
-            concurrency: roundTo(actualMaxPowerUsed / theoryMaxPower, 2),
+            concurrency: roundTo(actualMaxPowerUsed / theoryMaxPower, 1),
             eachChargePointContribution: chargePointSnapshot_Power,
             chargeEventAverage: eventAverages,
         }
