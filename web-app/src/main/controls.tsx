@@ -5,6 +5,7 @@ import Button from "../atoms/button";
 import React, {useEffect, useState} from "react";
 import {EnergyConsumptionRate_kWH_per_100km, Percentage, Power_Kw} from "./types";
 import {SimulationController} from "./simulator";
+import TabSwitchButton from "../atoms/tab-switch";
 
 
 interface ControlsProps {
@@ -13,11 +14,12 @@ interface ControlsProps {
 
 const Controls: React.FC<ControlsProps> = ({controller}) => {
     
+    const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
     const [numberOfChargePoints, setNumberOfChargePoints] = useState<number>(20);
     const [chargePointPower, setChargePointPower] = useState<Power_Kw>(11);
     const [carPowerRating, setCarPowerRating] = useState<EnergyConsumptionRate_kWH_per_100km>(18);
     const [carArrivalProbabilityMultiplier, setCarArrivalProbabilityMultiplier] =
-                    useState<Percentage>(100);
+        useState<Percentage>(100);
     
     
     useEffect(() => {
@@ -35,18 +37,39 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
     
     return (
         <div className="w-fit h-full flex flex-col gap-4 items-center">
+            
             <Group label="Parking Lot">
-                <NumberInput
-                    label="Number of Charge Stations"
-                    initialValue={numberOfChargePoints}
-                    onChange={setNumberOfChargePoints}
+                <TabSwitchButton
+                    tabs={[{label: "Simple"}, {label: "Advanced"}]}
+                    onSwitch={(index) => setShowAdvanced((
+                        index === 1
+                    ))}
                 />
-                <NumberInput
-                    label="Power (kW)"
-                    initialValue={chargePointPower}
-                    onChange={setChargePointPower}
-                />
+                {!showAdvanced && (
+                    <>
+                        <NumberInput
+                            label="Number of Charge Stations"
+                            initialValue={numberOfChargePoints}
+                            onChange={setNumberOfChargePoints}
+                        />
+                        <NumberInput
+                            label="Power (kW)"
+                            initialValue={chargePointPower}
+                            onChange={setChargePointPower}
+                        />
+                    </>
+                )}
+                {showAdvanced && (
+                    <>
+                        <NumberInput
+                            label="Charge Station"
+                            initialValue={numberOfChargePoints}
+                            onChange={setNumberOfChargePoints}
+                        />
+                    </>
+                )}
             </Group>
+            {/* External */}
             <Group label="External">
                 <NumberSlider
                     label="Probability Multiplier"
@@ -62,7 +85,7 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
             </Group>
             <Button
                 label="Submit"
-                onClick= {() => controller.simulate()}
+                onClick={() => controller.simulate()}
             />
         </div>
     )
