@@ -60,7 +60,7 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
     
     
     return (
-        <div className="max-w-96 h-full flex flex-col gap-4
+        <div className="w-96 h-full flex flex-col gap-4
                         rounded-xl bg-white bg-opacity-20 border p-8">
             <Group label="Parking Lot" className={'overflow-auto h-full'}>
                 <TabSwitchButton

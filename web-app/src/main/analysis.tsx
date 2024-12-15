@@ -80,12 +80,17 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
             <div className={'flex flex-row h-fit items-center w-full'}>
                 <span className="text-md font-bold text-gray-500 mr-4"> Average Charging Events </span>
                 <Stats label="Daily Average"
+                       className={'border-r-0 rounded-l-lg'}
+                        // No overlapping border, can be improved by creating StatsGroup
                        value={eventCount.daily}/>
                 <Stats label="Weekly Average"
+                       className={'border-r-0'}
                        value={eventCount.weekly}/>
                 <Stats label="Monthly Average"
+                       className={'border-r-0'}
                        value={eventCount.monthly}/>
                 <Stats label="Yearly Average"
+                       className={'rounded-r-lg'}
                        value={eventCount.yearly}/>
             </div>
         </div>
