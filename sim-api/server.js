@@ -80,6 +80,13 @@ app.delete("/api/inputs/:id", (req, res) => {
     res.json({message: "Input deleted successfully"});
 });
 
+// Reset all inputs
+app.delete("/api/inputs", (req, res) => {
+    database.inputs = [];
+    writeData(database);
+    res.json({message: "All inputs deleted successfully"});
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
