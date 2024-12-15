@@ -52,7 +52,6 @@ function createLayout(
             showline: false,
             showticklabels: !minimalView,
         },
-        autosize: true,
         margin: minimalView ? {t: 0, l: 0, r: 0, b: 0} : {t: 50, l: 50, r: 50, b: 50},
         paper_bgcolor: "rgba(0, 0, 0, 0)", // Transparent background
         plot_bgcolor: "rgba(0, 0, 0, 0)",

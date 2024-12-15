@@ -44,7 +44,9 @@ const Stats: React.FC<StatsProps> = ({label, icon, value, info, children, severi
                 </span>
                 )
             }
-            {children}
+            <div className="flex flex-col gap-2 h-full">
+                {children}
+            </div>
         </div>
     );
 }

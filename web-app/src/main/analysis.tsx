@@ -21,7 +21,7 @@ const ChargePointContributionPlot = ({eachChargePoint}: { eachChargePoint: Perce
     };
     return <PlotlyPlotter
         minimalView={true}
-        className={'w-full h-fit'}
+        className={'w-full h-40'}
         dataTrace={[dataTrace]}
     />;
 }
@@ -61,7 +61,9 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
             
             <Stats label="Average Charge Point % Contribution"
                    value={averageChargePointContribution ? averageChargePointContribution : 0}
-                   icon='fas fa-gas-pump'>
+                   icon='fas fa-gas-pump'
+                   className={'w-full h-fit'}
+            >
                 {eachChargePoint.length > 0 && (
                     <ChargePointContributionPlot eachChargePoint={eachChargePoint}/>
                 )}
