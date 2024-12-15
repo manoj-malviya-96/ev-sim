@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 
 interface NumberSliderProps {
-    initialValue: number;
+    initialValue: number; //Todo optimize more for why initialValue is needed
     label?: string;
     onChange: (value: number) => void;
     defaultValue?: number;
@@ -11,7 +11,7 @@ interface NumberSliderProps {
     className?: string;
 }
 
-const NumberSlider: React.FC<NumberSliderProps> = ({
+const _NumberSlider: React.FC<NumberSliderProps> = ({
                                                        label,
                                                        initialValue,
                                                        onChange,
@@ -64,5 +64,7 @@ const NumberSlider: React.FC<NumberSliderProps> = ({
         </div>
     );
 };
+
+const NumberSlider = React.memo(_NumberSlider);
 
 export default NumberSlider;

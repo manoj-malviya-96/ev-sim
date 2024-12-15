@@ -27,7 +27,7 @@ const computeTextColor = (severity: Severity | undefined) => {
     }
 };
 
-const Stats: React.FC<StatsProps> = ({label, icon, value, children, severity = 'good', className = ''}) => {
+const _Stats: React.FC<StatsProps> = ({label, icon, value, children, severity = 'good', className = ''}) => {
     
     return (
         <div
@@ -54,4 +54,5 @@ const Stats: React.FC<StatsProps> = ({label, icon, value, children, severity = '
     );
 };
 
+const Stats = React.memo(_Stats);
 export default Stats;

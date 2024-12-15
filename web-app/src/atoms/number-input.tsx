@@ -10,7 +10,7 @@ interface NumberInputProps {
     className?: string;
 }
 
-const NumberInput: React.FC<NumberInputProps> = ({
+const _NumberInput: React.FC<NumberInputProps> = ({
                                                      label,
                                                      initialValue,
                                                      onChange,
@@ -49,4 +49,5 @@ const NumberInput: React.FC<NumberInputProps> = ({
     );
 };
 
+const NumberInput = React.memo(_NumberInput);
 export default NumberInput;

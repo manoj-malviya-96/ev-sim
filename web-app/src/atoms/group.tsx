@@ -8,7 +8,7 @@ interface GroupProps {
     className?: string;
 }
 
-const Group: React.FC<GroupProps> = ({label, children, layout = 'vertical', className = ''}) => {
+const _Group: React.FC<GroupProps> = ({label, children, layout = 'vertical', className = ''}) => {
     return (
         <div className="w-full flex flex-col gap-0">
             {label && <label className="text-sm text-gray-500">{label}</label>}
@@ -25,4 +25,5 @@ const Group: React.FC<GroupProps> = ({label, children, layout = 'vertical', clas
     );
 };
 
+const Group = React.memo(_Group);
 export default Group;

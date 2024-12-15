@@ -8,7 +8,7 @@ interface ButtonProps {
     onClick: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({label, icon, disabled = false, danger = false, onClick}) => {
+const _Button: React.FC<ButtonProps> = ({label, icon, disabled = false, danger = false, onClick}) => {
     
     return (
         <button
@@ -24,4 +24,5 @@ const Button: React.FC<ButtonProps> = ({label, icon, disabled = false, danger = 
     );
 };
 
+const Button = React.memo(_Button);
 export default Button;

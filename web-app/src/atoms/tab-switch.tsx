@@ -11,7 +11,7 @@ interface TabSwitchButtonProps {
     onSwitch: (index: number) => void;
 }
 
-const TabSwitchButton: React.FC<TabSwitchButtonProps> = ({ tabs, className, onSwitch }) => {
+const _TabSwitchButton: React.FC<TabSwitchButtonProps> = ({ tabs, className, onSwitch }) => {
     const [activeTab, setActiveTab] = useState<number>(0); // Active tab index
     
     useEffect(() => {
@@ -41,4 +41,5 @@ const TabSwitchButton: React.FC<TabSwitchButtonProps> = ({ tabs, className, onSw
     );
 };
 
+const TabSwitchButton = React.memo(_TabSwitchButton);
 export default TabSwitchButton;

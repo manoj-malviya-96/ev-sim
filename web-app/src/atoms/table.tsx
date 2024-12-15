@@ -9,7 +9,7 @@ interface TableProps {
     className?: string;
 }
 
-const InputTable: React.FC<TableProps> = ({
+const _InputTable: React.FC<TableProps> = ({
                                               headers,
                                               initialValues = [],
                                               onChange,
@@ -86,4 +86,5 @@ const InputTable: React.FC<TableProps> = ({
     );
 };
 
+const InputTable = React.memo(_InputTable);
 export default InputTable;
