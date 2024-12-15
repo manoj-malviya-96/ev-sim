@@ -46,7 +46,6 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
     // Sync states with controller when backend updates occur
     useEffect(() => {
         const updateStatesFromController = () => {
-            console.log("Updating states from controller", controller);
             setNumberOfChargePoints(controller.chargePointsProps.numberOfChargePoints);
             setChargePointPower(controller.chargePointsProps.power);
             setCarPowerRating(controller.carPowerRating);

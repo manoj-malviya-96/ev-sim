@@ -174,7 +174,6 @@ export class SimulationController {
                 throw new Error(`Failed to send inputs: ${response.statusText}`);
             }
             const savedInput = await response.json();
-            console.log("Input saved to backend:", savedInput);
             return inputId.toString();
         }
         catch (error) {
