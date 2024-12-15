@@ -8,14 +8,13 @@ function createLayout(
     minimalView = true,
     textColor = "#ffffff"
 ): Partial<Plotly.Layout> {
-    const margin = !minimalView ? 100 : 0;
-    const backgroundColor = `rgba(0, 0, 0, 0)`;
+    const textSize = 16;
     
     return {
         title: {
             text: title,
             font: {
-                size: title !== "" ? 20 : 0,
+                size: 20,
                 color: textColor,
             },
         },
@@ -23,44 +22,40 @@ function createLayout(
             title: {
                 text: xTitle,
                 font: {
-                    size: 16,
+                    size: textSize + 4,
                     color: textColor,
                 },
             },
             tickfont: {
-                size: 10,
+                size: textSize,
                 color: textColor,
             },
             showgrid: false,
             zeroline: false,
             showline: false,
             showticklabels: !minimalView,
-            scaleratio: 1,
         },
         yaxis: {
             title: {
                 text: yTitle,
                 font: {
-                    size: 16,
+                    size: textSize + 4,
                     color: textColor,
                 },
             },
             tickfont: {
-                size: 10,
+                size: textSize,
                 color: textColor,
             },
             showgrid: false,
             zeroline: false,
             showline: false,
             showticklabels: !minimalView,
-            scaleanchor: "x",
-            scaleratio: 1,
         },
-        showlegend: false,
-        margin: {t: margin, l: margin, r: margin, b: margin},
         autosize: true,
-        paper_bgcolor: backgroundColor,
-        plot_bgcolor: backgroundColor,
+        margin: minimalView ? {t: 0, l: 0, r: 0, b: 0} : {t: 50, l: 50, r: 50, b: 50},
+        paper_bgcolor: "rgba(0, 0, 0, 0)", // Transparent background
+        plot_bgcolor: "rgba(0, 0, 0, 0)",
         hovermode: "closest",
     };
 }
@@ -80,21 +75,23 @@ const PlotlyPlotter: React.FC<PlotterProps> = ({
                                                    title = "",
                                                    xTitle = "",
                                                    yTitle = "",
-                                                   textColor = "#ffffff",
+                                                   textColor = "#000000",
                                                    className = "",
                                                    minimalView = true,
+                                                   
                                                }) => {
     return (
         <div
-            className={`relative w-full h-full max-h-screen max-w-full rounded-md p-2 ${className}`}
+            className={`block w-full h-full ${className}`}
         >
             <Plot
                 data={dataTrace}
                 layout={createLayout(title, xTitle, yTitle, minimalView, textColor)}
                 config={{
                     displaylogo: false, // Removes the ugly Plotly logo
-                    responsive: true, // Ensures responsiveness
+                    displayModeBar: false, // Disables the ugly bar on the top right
                 }}
+                style={{ width: "100%", height: "100%" }}
             />
         </div>
     );
