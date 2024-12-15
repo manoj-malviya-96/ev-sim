@@ -84,13 +84,16 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
                     </>
                 )}
                 {showAdvanced && (
-                    <TableInput
-                        className={'w-full h-full'}
-                        headers={["Charge Point", "Power (kW)"]}
-                        onChange={(values: any) => {
-                            console.error('Not implemented')
-                        }}
-                    />
+                    <>
+                        <span className='text-red-400'>Doesnt work yet!</span>
+                        <TableInput
+                            className={'w-full h-full'}
+                            headers={["Charge Point", "Power (kW)"]}
+                            onChange={(values: any) => {
+                                console.error('Not implemented')
+                            }}
+                        />
+                    </>
                 )}
             </Group>
             {/* External */}
