@@ -100,7 +100,7 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
                 <NumberSlider
                     label="Scale Probability"
                     initialValue={carArrivalProbabilityMultiplier}
-                    max={200} min={20}
+                    max={200} min={20} defaultValue={100}
                     onChange={setCarArrivalProbabilityMultiplier}
                 />
                 <NumberInput

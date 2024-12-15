@@ -4,6 +4,7 @@ interface NumberSliderProps {
     initialValue: number;
     label?: string;
     onChange: (value: number) => void;
+    defaultValue?: number;
     min?: number;
     max?: number;
     step?: number;
@@ -14,6 +15,7 @@ const NumberSlider: React.FC<NumberSliderProps> = ({
                                                        label,
                                                        initialValue,
                                                        onChange,
+                                                       defaultValue=50,
                                                        min = 0,
                                                        max = 100,
                                                        step = 1,
@@ -31,6 +33,11 @@ const NumberSlider: React.FC<NumberSliderProps> = ({
         setValue(num);
         onChange(num);
     }
+
+    const handleDoubleClick = () => {
+        setValue(defaultValue);
+        onChange(defaultValue);
+    };
     
     useEffect(() => {
         setValue(initialValue);
@@ -46,6 +53,7 @@ const NumberSlider: React.FC<NumberSliderProps> = ({
                 min={min}
                 max={max}
                 step={step}
+                onDoubleClick={handleDoubleClick}
                 className="slider w-full"
             />
             <div className="flex justify-between text-sm mt-1">

@@ -28,14 +28,12 @@ const computeTextColor = (severity: Severity | undefined) => {
 };
 
 const Stats: React.FC<StatsProps> = ({label, icon, value, children, severity = 'good', className = ''}) => {
-    const [showChildren, setShowChildren] = React.useState(true);
     
     return (
         <div
             className={`flex flex-col px-4 py-2
-                        cursor-pointer bg-white backdrop-blur-lg
+                        hover:shadow bg-white backdrop-blur-lg
                         border border-black-50 bg-opacity-50 ${className}`}
-            onClick={() => setShowChildren(!showChildren)}
         >
             <div className="flex flex-row w-full justify-between items-center">
                 <div className="flex flex-col">
@@ -49,7 +47,7 @@ const Stats: React.FC<StatsProps> = ({label, icon, value, children, severity = '
             
             
             <div className={`flex gap-2 h-full w-full
-                            justify-center items-center ${showChildren ? 'block' : 'hidden'}`}>
+                            justify-center items-center`}>
                 {children}
             </div>
         </div>
