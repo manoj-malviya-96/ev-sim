@@ -18,6 +18,14 @@ export interface SimulationResults {
     powerHistory: Power_Kw[];
 }
 
+
+export interface SimulationInput {
+    uniform_NumChargePoints: number;
+    uniform_ChargePointPower: Power_Kw;
+    carPowerRating: EnergyConsumptionRate_kWH_per_km;
+    carArrivalProbabilityMultiplier: Percentage;
+}
+
 export const createUniformChargePoints = (numberOfChargePoints: number, power: Power_Kw): ChargePoints => {
     return Array.from({length: numberOfChargePoints}, (index) => {
         return {
@@ -162,6 +170,7 @@ export class SimulationController {
         
         const actualMaxPowerUsed = Math.max(...powerHistory);
         const theoryMaxPower = chargePoints.reduce((acc, cp) => acc + cp.power, 0);
+        
         const results: SimulationResults = {
             totalEnergySpent: roundTo(
                 powerHistory.reduce((acc, power) => acc + power, 0) / intervalsInHour, 2),
