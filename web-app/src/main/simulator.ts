@@ -167,7 +167,7 @@ export class SimulationController {
                 powerHistory.reduce((acc, power) => acc + power, 0) / intervalsInHour, 2),
             theoreticalMaxPowerUsed: theoryMaxPower,
             actualMaxPowerUsed: actualMaxPowerUsed,
-            concurrency: actualMaxPowerUsed / theoryMaxPower,
+            concurrency: roundTo(actualMaxPowerUsed / theoryMaxPower, 2),
             powerHistory: powerHistory,
         }
         
