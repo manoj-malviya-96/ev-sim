@@ -14,7 +14,9 @@ const Group: React.FC<GroupProps> = ({label, children, layout = 'vertical', clas
             {label && <label className="text-sm text-gray-500">{label}</label>}
             <div
                 className={`flex flex-${layout === 'vertical' ? 'col' : 'row'}
-                        gap-4 p-4 rounded-md hover:shadow border border-gray-200
+                        gap-4 p-4 rounded-md hover:shadow
+                        bg-white bg-opacity-80
+                        border border-gray-200
                         backdrop-blur-lg w-full h-fit
                         ${className}`}>
                 {children}

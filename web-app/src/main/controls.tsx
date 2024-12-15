@@ -60,8 +60,8 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
     
     
     return (
-        <div className="w-56 h-full flex flex-col gap-4">
-            <h2 className="text-2xl font-bold">EV Charging Lot Simulator</h2>
+        <div className="max-w-96 h-full flex flex-col gap-4
+                        rounded-xl bg-white bg-opacity-20 border p-8">
             <Group label="Parking Lot" className={'overflow-auto h-full'}>
                 <TabSwitchButton
                     tabs={[{label: "Simple"}, {label: "Advanced"}]}
@@ -96,7 +96,6 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
                     </>
                 )}
             </Group>
-            {/* External */}
             <Group label="Car Arrival">
                 <NumberSlider
                     label="Scale Probability"

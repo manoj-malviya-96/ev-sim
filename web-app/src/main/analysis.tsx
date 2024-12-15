@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import Stats from "../atoms/stats";
 import './data-parser';
-import {SimulationResults} from "./simulator";
+import {ChargeEventCount, SimulationResults} from "./simulator";
 import {Energy_KwH, Percentage, Power_Kw, roundTo} from "./types";
 import PlotlyPlotter from "../atoms/plotly-plotter";
 
@@ -21,8 +21,7 @@ const ChargePointContributionPlot = ({eachChargePoint}: { eachChargePoint: Perce
         marker: {color: 'rgb(50, 50, 50)'}, // Can be extracted via tailwind.
     };
     return <PlotlyPlotter
-        minimalView={true}
-        className={'w-full h-20'}
+        className={'w-56 h-32'}
         dataTrace={[dataTrace]}
     />;
 }
@@ -35,12 +34,20 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
     const [concurrency, setConcurrency] = React.useState<number>(0);
     const [eachChargePoint, setEachChargePoint] = React.useState<Percentage[]>([]);
     
+    const [eventCount, setEventCount] = React.useState<ChargeEventCount>({
+        daily: 0,
+        weekly: 0,
+        monthly: 0,
+        yearly: 0,
+    });
+    
     useEffect(() => {
         if (results) {
             setTotalEnergySpent(results.totalEnergySpent);
             setActualMaxPower(results.actualMaxPowerUsed);
             setConcurrency(results.concurrency);
             setEachChargePoint(results.eachChargePointContribution);
+            setEventCount(results.chargeEventAverage);
         }
     }, [results]);
     
@@ -48,27 +55,38 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
         roundTo(eachChargePoint.reduce((acc, val) => acc + val, 0)
             / eachChargePoint.length, 2);
     
-    
-    return (
-        results &&
-        <div className={`w-fit h-full p-2
-                        max-h-screen overflow-auto gap-4 flex flex-col
+    return ( results &&
+        <div className={`w-full h-full p-8 bg-white bg-opacity-20 border rounded-lg
+                        max-h-screen overflow-auto flex flex-col gap-4
                         ${className}`}>
-            <div className={'flex flex-row w-full h-fit gap-3 '}>
+            <div className={'grid grid-cols-2 gap-0 '}>
                 <Stats label="Total Charge Expected (kwH)" value={totalEnergySpent}
                        icon='fas fa-bolt'/>
-                <Stats label="Max Charge Expected (kwH)" value={actualMaxPower}/>
-                <Stats label="Concurrency" icon='fas fa-money-bills' value={concurrency}/>
+                <Stats label="Max Charge Expected (kwH)" value={actualMaxPower}>
+                    <span className="text-sm text-gray-600 text-left w-full">
+                        Concurrency (Max/Theoretical power) for this setup is {concurrency}</span>
+                </Stats>
+                <Stats label="Average Charge Point % Contribution"
+                       value={averageChargePointContribution ? averageChargePointContribution : 0}
+                       icon='fas fa-gas-pump'
+                       className={'w-full h-fit'}
+                >
+                    {eachChargePoint.length > 0 && (
+                        <ChargePointContributionPlot eachChargePoint={eachChargePoint}/>
+                    )}
+                </Stats>
             </div>
-            <Stats label="Average Charge Point % Contribution"
-                   value={averageChargePointContribution ? averageChargePointContribution : 0}
-                   icon='fas fa-gas-pump'
-                   className={'w-full h-fit'}
-            >
-                {eachChargePoint.length > 0 && (
-                    <ChargePointContributionPlot eachChargePoint={eachChargePoint}/>
-                )}
-            </Stats>
+            <div className={'flex flex-row h-fit items-center w-full'}>
+                
+                <Stats label="Daily Average"
+                       value={eventCount.daily}/>
+                <Stats label="Weekly Average"
+                       value={eventCount.weekly}/>
+                <Stats label="Monthly Average"
+                       value={eventCount.monthly}/>
+                <Stats label="Yearly Average"
+                       value={eventCount.yearly}/>
+            </div>
         </div>
     );
 }

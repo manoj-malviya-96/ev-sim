@@ -12,9 +12,12 @@ const EVSim = () => {
     controller.updateFromLastInput();
     
     return (
-        <div className="w-screen h-screen flex flex-row p-8 gap-8">
-            <Controls controller={controller}/>
-            <Analysis results={results}/>
+        <div className="w-screen h-screen p-8">
+            <h1 className="text-4xl font-bold text-center">EV Simulator</h1>
+            <div className="flex flex-row p-8 gap-8">
+                <Controls controller={controller}/>
+                <Analysis results={results}/>
+            </div>
         </div>
     );
 }

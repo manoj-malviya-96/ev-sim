@@ -46,3 +46,4 @@ export function roundTo(numer: number, places: number) {
 export const hoursInADay = 24;
 export const minutesInAnHour = 60;
 export const daysInAYear = 365;
+export const daysInMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];

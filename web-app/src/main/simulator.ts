@@ -23,12 +23,20 @@ import {pCarArrivalData, pCarDemandData} from "./data-parser";
 
 const API_URL = "http://localhost:3001/api";
 
+export interface ChargeEventCount {
+    daily: number;
+    weekly: number;
+    monthly: number;
+    yearly: number;
+}
+
 export interface SimulationResults {
     totalEnergySpent: Energy_KwH;
     theoreticalMaxPowerUsed: Power_Kw;
     actualMaxPowerUsed: Power_Kw;
     concurrency: number; // Should be a percentage
     eachChargePointContribution: Percentage[];
+    chargeEventAverage: ChargeEventCount;
 }
 
 export interface SimulationInput {
@@ -75,6 +83,77 @@ const parseCarArrivalData = (
     return result;
 };
 
+const getEventAverages = (
+    eventHistory: number[],
+    intervalsPerHour: number
+): ChargeEventCount => {
+    const daysInMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // Non-leap year
+    
+    const intervalsPerDay = hoursInADay * intervalsPerHour;
+    const intervalsPerMonth = daysInMonths.map(days => days * intervalsPerDay);
+    const intervalsPerWeek = intervalsPerDay * 7;
+    const intervalsPerYear = intervalsPerMonth.reduce((sum, int) => sum + int, 0);
+    
+    const calculateDailyAverage = () => {
+        const numDays = Math.floor(eventHistory.length / intervalsPerDay);
+        let totalEvents = 0;
+        
+        for (let day = 0; day < numDays; day++) {
+            const start = day * intervalsPerDay;
+            const end = start + intervalsPerDay;
+            totalEvents += eventHistory.slice(start, end).reduce((sum, val) => sum + val, 0);
+        }
+        
+        return roundTo(totalEvents / numDays, 2);
+    };
+    
+    const calculateWeeklyAverage = () => {
+        const numWeeks = Math.floor(eventHistory.length / intervalsPerWeek);
+        let totalEvents = 0;
+        
+        for (let week = 0; week < numWeeks; week++) {
+            const start = week * intervalsPerWeek;
+            const end = start + intervalsPerWeek;
+            totalEvents += eventHistory.slice(start, end).reduce((sum, val) => sum + val, 0);
+        }
+        
+        return roundTo(totalEvents / numWeeks, 2);
+    };
+    
+    
+    const calculateMonthlyAverage = () => {
+        let start = 0;
+        const monthlyTotals = intervalsPerMonth.map(intervals => {
+            const end = start + intervals;
+            const total = eventHistory.slice(start, end).reduce((sum, val) => sum + val, 0);
+            start = end;
+            return total;
+        });
+        return roundTo(monthlyTotals.reduce((sum, val) => sum + val, 0) / monthlyTotals.length, 2);
+    };
+    
+    const calculateYearlyAverage = () => {
+        const numYears = Math.floor(eventHistory.length / intervalsPerYear);
+        let totalEvents = 0;
+        
+        for (let year = 0; year < numYears; year++) {
+            const start = year * intervalsPerYear;
+            const end = start + intervalsPerYear;
+            totalEvents += eventHistory.slice(start, end).reduce((sum, val) => sum + val, 0);
+        }
+        
+        return roundTo(totalEvents / numYears, 2);
+    };
+    
+    
+    return {
+        daily: calculateDailyAverage(),
+        weekly: calculateWeeklyAverage(),
+        monthly: calculateMonthlyAverage(),
+        yearly: calculateYearlyAverage()
+    };
+};
+
 
 const getCumulativeForCarDemand = (carDemand: DistanceAndProbability): DistanceAndProbability => {
     const result: DistanceAndProbability = {};
@@ -85,7 +164,6 @@ const getCumulativeForCarDemand = (carDemand: DistanceAndProbability): DistanceA
     }
     return result;
 }
-
 
 
 export class SimulationController {
@@ -251,6 +329,7 @@ export class SimulationController {
         
         const powerHistory = [];
         const chargePointSnapshot_Energy = chargePoints.map(() => 0);
+        const chargingEventsHistory = Array.from({length: totalIntervals}, () => 0);
         
         for (let interval = 0; interval < totalIntervals; interval++) {
             // Reset the charge points
@@ -264,8 +343,12 @@ export class SimulationController {
             for (let cpIdx = 0; cpIdx < chargePoints.length; cpIdx++) {
                 const cp = chargePoints[cpIdx];
                 
+                // Note assuming there is no QUEUE.
+                // If a car arrives and the charge point is busy, the car will leave. Humans!!
                 if (cp.intervalsLeft === 0 &&
                     carArrivalPbData[intervalNumOfTheDay] >= Math.random()) {
+                    
+                    chargingEventsHistory[interval] += 1;
                     
                     // Car arrives at the charge point
                     const distance: Distance_km = this.getRandomCarDemand();
@@ -287,7 +370,6 @@ export class SimulationController {
             powerHistory.push(totalPowerUsedInInterval);
         }
         
-        
         const totalEnergySpent: Energy_KwH = powerHistory.reduce((acc, power) => acc + power, 0) / intervalsInHour;
         const actualMaxPowerUsed = Math.max(...powerHistory);
         const theoryMaxPower = chargePoints.reduce((acc, cp) => acc + cp.power, 0);
@@ -295,13 +377,16 @@ export class SimulationController {
             return roundTo(100 * energy / totalEnergySpent, 2); // Percentage
         })
         
+        const eventAverages = getEventAverages(chargingEventsHistory, intervalsInHour);
+        
         
         const results: SimulationResults = {
             totalEnergySpent: roundTo(totalEnergySpent, 2),
             theoreticalMaxPowerUsed: theoryMaxPower,
             actualMaxPowerUsed: actualMaxPowerUsed,
             concurrency: roundTo(actualMaxPowerUsed / theoryMaxPower, 2),
-            eachChargePointContribution: eachChargePointContribution
+            eachChargePointContribution: eachChargePointContribution,
+            chargeEventAverage: eventAverages,
         }
         
         this.onFinishedSimulation(results);

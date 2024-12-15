@@ -5,55 +5,55 @@ type Severity = 'good' | 'warning' | 'danger';
 interface StatsProps {
     label: string;
     icon?: string;
-    info?: string;
     children?: React.ReactNode;
     severity?: Severity;
     value: number | string | undefined;
     className?: string;
 }
 
-const computeBgColor = (severity: Severity | undefined) => {
+const computeTextColor = (severity: Severity | undefined) => {
     if (!severity) {
-        return 'bg-white';
+        return 'text-gray-800'; // Default text color
     }
     switch (severity) {
         case 'good':
-            return 'bg-white';
+            return 'text-green-600'; // Green for good
         case 'warning':
-            return 'bg-yellow-400';
+            return 'text-yellow-600'; // Yellow for warning
         case 'danger':
-            return 'bg-red-400';
+            return 'text-red-600'; // Red for danger
         default:
-            return 'bg-primary';
+            return 'text-gray-800';
     }
-}
+};
 
-const Stats: React.FC<StatsProps> = ({label, icon, value, info, children, severity = 'good', className = ''}) => {
+const Stats: React.FC<StatsProps> = ({label, icon, value, children, severity = 'good', className = ''}) => {
     const [showChildren, setShowChildren] = React.useState(true);
     
-    
     return (
-        <div className={`flex flex-col items-center shadow p-4 cursor-pointer bg-white backdrop-blur-lg
-                        rounded-md ${computeBgColor(severity)} bg-opacity-50
-                        ${className}`}
-             onClick={() => setShowChildren(!showChildren)}>
-            <span className="text-sm text-gray-800 items-center flex flex-row gap-2">
-                {icon && <i className={icon}/>}
-                {label}
-            </span>
-            <span className="text-2xl font-extrabold">{value}</span>
-            {info &&
-                (
-                    <span className="text-sm text-gray-800 items-center flex flex-row gap-2">
-                {info}
+        <div
+            className={`flex flex-col px-4 py-2
+                        cursor-pointer bg-white backdrop-blur-lg
+                        border border-black-50 bg-opacity-50 ${className}`}
+            onClick={() => setShowChildren(!showChildren)}
+        >
+            <div className="flex flex-row w-full justify-between items-center">
+                <div className="flex flex-col">
+                <span className="text-md">
+                    {label}
                 </span>
-                )
-            }
-            <div className={`flex flex-col gap-2 h-full ${showChildren ? 'block' : 'hidden'}`}>
+                    <span className={`text-2xl font-extrabold ${computeTextColor(severity)}`}>{value}</span>
+                </div>
+                {icon && <i className={`${icon} text-3xl ${computeTextColor(severity)}`}/>}
+            </div>
+            
+            
+            <div className={`flex gap-2 h-full w-full
+                            justify-center items-center ${showChildren ? 'block' : 'hidden'}`}>
                 {children}
             </div>
         </div>
     );
-}
+};
 
 export default Stats;
