@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const {readData, writeData} = require("./temp-storage");
 
+// Todo can we use TS for this? Right now for simplicity I am using JS.
+
 const app = express();
 app.use(bodyParser.json());
 
