@@ -15,24 +15,9 @@ let database = readData(); // Load stored data
 
 // Create a new input
 app.post("/api/inputs", (req, res) => {
-    const {
-        uniform_NumChargePoints,
-        uniform_ChargePointPower,
-        carPowerRating,
-        carArrivalProbabilityMultiplier,
-    } = req.body;
-
-    const newInput = {
-        id: Date.now(),
-        uniform_NumChargePoints,
-        uniform_ChargePointPower,
-        carPowerRating,
-        carArrivalProbabilityMultiplier,
-    };
-
-    database.inputs.push(newInput);
+    database.inputs.push(req.body);
     writeData(database);
-    res.status(201).json(newInput);
+    res.status(201).json(req.body);
 });
 
 // Get all inputs
@@ -43,13 +28,6 @@ app.get("/api/inputs", (req, res) => {
 // Update an input by ID
 app.put("/api/inputs/:id", (req, res) => {
     const {id} = req.params;
-    const {
-        uniform_NumChargePoints,
-        uniform_ChargePointPower,
-        carPowerRating,
-        carArrivalProbabilityMultiplier,
-    } = req.body;
-
     const inputIndex = database.inputs.findIndex((input) => input.id === Number(id));
     if (inputIndex === -1) {
         return res.status(404).json({error: "Input not found"});
@@ -57,10 +35,7 @@ app.put("/api/inputs/:id", (req, res) => {
 
     database.inputs[inputIndex] = {
         ...database.inputs[inputIndex],
-        uniform_NumChargePoints,
-        uniform_ChargePointPower,
-        carPowerRating,
-        carArrivalProbabilityMultiplier,
+        ...req.body,
     };
 
     writeData(database);
@@ -86,6 +61,16 @@ app.delete("/api/inputs", (req, res) => {
     database.inputs = [];
     writeData(database);
     res.json({message: "All inputs deleted successfully"});
+});
+
+app.post("/api/results", (req, res) => {
+    database.results.push(req.body);
+    writeData(database);
+    res.status(201).json(req.body);
+});
+
+app.get("/api/results", (req, res) => {
+    res.json(database.results);
 });
 
 const PORT = 3001;

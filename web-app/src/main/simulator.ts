@@ -27,7 +27,6 @@ export interface SimulationResults {
     theoreticalMaxPowerUsed: Power_Kw;
     actualMaxPowerUsed: Power_Kw;
     concurrency: number; // Should be a percentage
-    powerHistory: Power_Kw[];
 }
 
 
@@ -153,7 +152,9 @@ export class SimulationController {
     }
     
     private async sendInputsToBackend() {
+        const inputId = crypto.randomUUID();
         const inputConfig = {
+            inputId: inputId,
             uniform_NumChargePoints: this.chargePointsProps.numberOfChargePoints,
             uniform_ChargePointPower: this.chargePointsProps.power || 0,
             carPowerRating: this.carPowerRating,
@@ -174,6 +175,7 @@ export class SimulationController {
             }
             const savedInput = await response.json();
             console.log("Input saved to backend:", savedInput);
+            return inputId.toString();
         }
         catch (error) {
             console.error("Error sending inputs to backend:", error);
@@ -211,9 +213,37 @@ export class SimulationController {
         });
     }
     
+    private sendResultsToBackend(inputId: string, results: SimulationResults) {
+        const resultsConfig = {
+            inputId: inputId,
+            ...results,
+        };
+        
+        fetch(`${API_URL}/results`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(resultsConfig),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`Failed to send results: ${response.statusText}`);
+            }
+            console.log("Results saved to backend");
+        })
+        .catch((error) => {
+            console.error("Error sending results to backend:", error);
+        });
+    }
+    
     public async simulate() {
         
-        await this.sendInputsToBackend();
+        const inputId = await this.sendInputsToBackend();
+        if (!inputId) {
+            console.error("Failed to send inputs to backend");
+            return;
+        }
         
         const intervalsInHour = minutesInAnHour / this.interval_min;
         const carArrivalPbData = parseCarArrivalData(this.rawCarArrivalData,
@@ -266,11 +296,11 @@ export class SimulationController {
             theoreticalMaxPowerUsed: theoryMaxPower,
             actualMaxPowerUsed: actualMaxPowerUsed,
             concurrency: roundTo(actualMaxPowerUsed / theoryMaxPower, 2),
-            powerHistory: powerHistory,
         }
         
         this.onFinishedSimulation(results);
         
+        this.sendResultsToBackend(inputId, results);
     }
 }
 
