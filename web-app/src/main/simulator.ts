@@ -226,15 +226,15 @@ export class SimulationController {
             },
             body: JSON.stringify(resultsConfig),
         })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`Failed to send results: ${response.statusText}`);
-            }
-            console.log("Results saved to backend");
-        })
-        .catch((error) => {
-            console.error("Error sending results to backend:", error);
-        });
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Failed to send results: ${response.statusText}`);
+                }
+                console.log("Results saved to backend");
+            })
+            .catch((error) => {
+                console.error("Error sending results to backend:", error);
+            });
     }
     
     public async simulate() {
