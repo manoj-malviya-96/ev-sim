@@ -10,12 +10,12 @@ interface GroupProps {
 
 const Group: React.FC<GroupProps> = ({label, children, layout = 'vertical', className = ''}) => {
     return (
-        <div className="flex flex-col gap-0">
+        <div className="w-full flex flex-col gap-0">
             {label && <label className="text-sm text-gray-500">{label}</label>}
             <div
                 className={`flex flex-${layout === 'vertical' ? 'col' : 'row'}
                         gap-4 p-4 rounded-md border border-gray-200 hover:shadow
-                        backdrop-blur-lg
+                        backdrop-blur-lg w-full h-full
                         ${className}`}>
                 {children}
             </div>

@@ -59,8 +59,8 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
     
     
     return (
-        <div className="w-fit h-full flex flex-col gap-4 items-center">
-            
+        <div className="w-1/3 h-full flex flex-col gap-4">
+            <h2 className="text-2xl font-bold">Controls</h2>
             <Group label="Parking Lot">
                 <TabSwitchButton
                     tabs={[{label: "Simple"}, {label: "Advanced"}]}
@@ -93,15 +93,15 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
                 )}
             </Group>
             {/* External */}
-            <Group label="External">
+            <Group label="Car Arrival">
                 <NumberSlider
-                    label="Probability Multiplier"
+                    label="Scale Probability"
                     initialValue={carArrivalProbabilityMultiplier}
                     max={200} min={20}
                     onChange={setCarArrivalProbabilityMultiplier}
                 />
                 <NumberInput
-                    label="Car Power Rating (kWh)"
+                    label="Power Rating (kWh/100km)"
                     initialValue={carPowerRating}
                     onChange={setCarPowerRating}
                 />

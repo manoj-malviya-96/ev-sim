@@ -4,7 +4,7 @@ module.exports = {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: '#84df92', // Primary base color (e.g., a blue shade)
+                    DEFAULT: '#589361', // Primary base color (e.g., a blue shade)
                 },
             },
         },

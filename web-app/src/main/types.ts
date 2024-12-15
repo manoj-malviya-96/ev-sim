@@ -36,6 +36,11 @@ export interface DistanceAndProbability {
 }
 
 
+export function roundTo(numer: number, places: number) {
+    const factor = Math.pow(10, places);
+    return Math.round(numer * factor) / factor;
+}
+
 export const hoursInADay = 24;
 export const minutesInAnHour = 60;
 export const daysInAYear = 365;

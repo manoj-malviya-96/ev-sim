@@ -82,7 +82,7 @@ const PlotlyPlotter: React.FC<PlotterProps> = ({
                                                }) => {
     return (
         <div
-            className={`block w-full h-full ${className}`}
+            className={`${className}`}
         >
             <Plot
                 data={dataTrace}

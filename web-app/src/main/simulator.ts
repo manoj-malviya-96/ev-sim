@@ -1,6 +1,7 @@
 import {
     ChargePoint,
     ChargePoints,
+    roundTo,
     daysInAYear,
     Distance_km,
     DistanceAndProbability,
@@ -27,8 +28,8 @@ export interface SimulationResults {
     theoreticalMaxPowerUsed: Power_Kw;
     actualMaxPowerUsed: Power_Kw;
     concurrency: number; // Should be a percentage
+    eachChargePointContribution: Percentage[];
 }
-
 
 export interface SimulationInput {
     uniform_NumChargePoints: number;
@@ -51,11 +52,6 @@ const constructChargePoints = (props: UniformChargePoints): ChargePoints => {
         throw new Error("Charge point properties not set");
     }
     return createUniformChargePoints(props);
-}
-
-function roundTo(numer: number, places: number) {
-    const factor = Math.pow(10, places);
-    return Math.round(numer * factor) / factor;
 }
 
 
@@ -173,7 +169,7 @@ export class SimulationController {
             if (!response.ok) {
                 throw new Error(`Failed to send inputs: ${response.statusText}`);
             }
-            const savedInput = await response.json();
+            await response.json();
             return inputId.toString();
         }
         catch (error) {
@@ -252,6 +248,7 @@ export class SimulationController {
         const chargePoints = constructChargePoints(this.chargePointsProps);
         
         const powerHistory = [];
+        const chargePointSnapshot_Energy = chargePoints.map(() => 0);
         
         for (let interval = 0; interval < totalIntervals; interval++) {
             // Reset the charge points
@@ -278,23 +275,31 @@ export class SimulationController {
             
             // Calculate the total power used in this interval
             let totalPowerUsedInInterval = 0;
-            chargePoints.forEach((cp) => {
+            chargePoints.forEach((cp, idx) => {
                 if (cp.intervalsLeft > 0) {
+                    chargePointSnapshot_Energy[idx] += cp.power / intervalsInHour;
+                    // Snapshot of power used by each charge point
                     totalPowerUsedInInterval += cp.power;
                 }
             });
             powerHistory.push(totalPowerUsedInInterval);
         }
         
+        
+        const totalEnergySpent: Energy_KwH = powerHistory.reduce((acc, power) => acc + power, 0) / intervalsInHour;
         const actualMaxPowerUsed = Math.max(...powerHistory);
         const theoryMaxPower = chargePoints.reduce((acc, cp) => acc + cp.power, 0);
+        const eachChargePointContribution = chargePointSnapshot_Energy.map((energy) => {
+            return roundTo(100 * energy / totalEnergySpent, 2); // Percentage
+        })
+        
         
         const results: SimulationResults = {
-            totalEnergySpent: roundTo(
-                powerHistory.reduce((acc, power) => acc + power, 0) / intervalsInHour, 2),
+            totalEnergySpent: roundTo(totalEnergySpent, 2),
             theoreticalMaxPowerUsed: theoryMaxPower,
             actualMaxPowerUsed: actualMaxPowerUsed,
             concurrency: roundTo(actualMaxPowerUsed / theoryMaxPower, 2),
+            eachChargePointContribution: eachChargePointContribution
         }
         
         this.onFinishedSimulation(results);
