@@ -31,4 +31,5 @@ export interface DistanceAndProbability {
 
 
 export const hoursInADay = 24;
+export const minutesInAnHour = 60;
 export const daysInAYear = 365;

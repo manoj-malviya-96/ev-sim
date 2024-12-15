@@ -5,7 +5,7 @@ import {
     Minutes, Percentage,
     Power_Kw, Probability,
     HourlyTimeAndProbability,
-    Years, Distance_km, Hours, hoursInADay, daysInAYear
+    Years, Distance_km, Hours, hoursInADay, daysInAYear, minutesInAnHour
 } from "./types";
 import {pCarArrivalData, pCarDemandData} from "./data-parser";
 
@@ -118,7 +118,7 @@ export class SimulationController {
     }
     
     public simulate() {
-        const intervalsInHour = 60 / this.interval_min;
+        const intervalsInHour = minutesInAnHour / this.interval_min;
         const carArrivalPbData = parseCarArrivalData(this.rawCarArrivalData,
             intervalsInHour,
             this.carArrivalProbabilityMultiplier);
