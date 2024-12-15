@@ -28,3 +28,7 @@ export interface HourlyTimeAndProbability {
 export interface DistanceAndProbability {
     [distance: Distance_km]: Probability
 }
+
+
+export const hoursInADay = 24;
+export const daysInAYear = 365;
