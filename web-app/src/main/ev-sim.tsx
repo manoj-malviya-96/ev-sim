@@ -11,7 +11,14 @@ const EVSim = () => {
     });
     
     return (
-        <div className="w-screen h-screen flex flex-row p-8 gap-8">
+        <div className="w-screen h-screen flex flex-row p-8 gap-8"
+             style={{
+                 // backgroundImage: `url(${Background})`,
+                 backgroundSize: 'cover',
+                 backgroundPosition: 'center',
+                 backgroundRepeat: 'no-repeat',
+             }}
+        >
             <Controls controller={controller}/>
             <Analysis results={results}/>
         </div>
