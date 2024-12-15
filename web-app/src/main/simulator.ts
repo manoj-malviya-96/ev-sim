@@ -312,6 +312,7 @@ export class SimulationController {
             });
     }
     
+    //Todo: This function is a mess, refactor it to make it more modular
     public async simulate() {
         
         const inputId = await this.sendInputsToBackend();
