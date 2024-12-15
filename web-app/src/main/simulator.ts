@@ -125,7 +125,7 @@ export class SimulationController {
         });
     }
     
-    public simulate() {
+    public async simulate() {
         const intervalsInHour = minutesInAnHour / this.interval_min;
         const carArrivalPbData = parseCarArrivalData(this.rawCarArrivalData,
             intervalsInHour,

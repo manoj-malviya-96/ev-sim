@@ -14,6 +14,7 @@ interface ControlsProps {
 
 const Controls: React.FC<ControlsProps> = ({controller}) => {
     
+    const [resultsOutdated, setResultsOutdated] = useState<boolean>(true);
     const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
     const [numberOfChargePoints, setNumberOfChargePoints] = useState<number>(20);
     const [chargePointPower, setChargePointPower] = useState<Power_Kw>(11);
@@ -34,6 +35,17 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
         controller.setCarArrivalProbabilityMultiplier(carArrivalProbabilityMultiplier);
     }, [controller, carArrivalProbabilityMultiplier]);
     
+    useEffect(() => {
+        setResultsOutdated(true);
+    }, [numberOfChargePoints, chargePointPower, carPowerRating, carArrivalProbabilityMultiplier]);
+    
+    useEffect(() => {
+        if (resultsOutdated) {
+            controller.simulate().then(() => {
+                setResultsOutdated(false);
+            });
+        }
+    }, [resultsOutdated, controller]);
     
     return (
         <div className="w-fit h-full flex flex-col gap-4 items-center">
@@ -83,10 +95,6 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
                     onChange={setCarPowerRating}
                 />
             </Group>
-            <Button
-                label="Submit"
-                onClick={() => controller.simulate()}
-            />
         </div>
     )
 }
