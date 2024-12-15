@@ -2,6 +2,7 @@ import {SimulationController, SimulationResults} from "./simulator";
 import Controls from "./controls";
 import Analysis from "./analysis";
 import {useState} from "react";
+import Logo from "../data/logo.svg";
 
 
 const EVSim = () => {
@@ -13,9 +14,12 @@ const EVSim = () => {
     
     return (
         <div className="w-screen h-screen p-8">
-            <h1 className="text-4xl font-bold text-center uppercase">EV Simulator</h1>
+            <div className="flex flex-row w-full justify-center items-center">
+                <img src={Logo} alt="logo" className="w-16 h-16"/>
+                <h1 className="text-4xl font-bold text-center uppercase">EV Simulator</h1>
+            </div>
             <div className="flex flex-row p-8 gap-8 items-center">
-                <Controls controller={controller}/>
+            <Controls controller={controller}/>
                 {results && <Analysis results={results}/>}
                 {!results &&
                     <div className="w-3/4 h-3/4">
