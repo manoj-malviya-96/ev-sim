@@ -6,6 +6,7 @@ import {EnergyConsumptionRate_kWH_per_100km, Percentage, Power_Kw} from "./types
 import {SimulationController} from "./simulator";
 import TabSwitchButton from "../atoms/tab-switch";
 import Button from "../atoms/button";
+import TableInput from "../atoms/table";
 
 
 interface ControlsProps {
@@ -36,7 +37,7 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
     }, [controller, numberOfChargePoints, chargePointPower]);
     
     useEffect(() => {
-        controller.carPowerRating= carPowerRating;
+        controller.carPowerRating = carPowerRating;
     }, [controller, carPowerRating]);
     
     useEffect(() => {
@@ -61,7 +62,7 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
     return (
         <div className="w-1/3 h-full flex flex-col gap-4">
             <h2 className="text-2xl font-bold">Controls</h2>
-            <Group label="Parking Lot">
+            <Group label="Parking Lot" className={'overflow-auto h-full'}>
                 <TabSwitchButton
                     tabs={[{label: "Simple"}, {label: "Advanced"}]}
                     onSwitch={(index) => setShowAdvanced((
@@ -83,13 +84,13 @@ const Controls: React.FC<ControlsProps> = ({controller}) => {
                     </>
                 )}
                 {showAdvanced && (
-                    <>
-                        <NumberInput
-                            label="Charge Station"
-                            initialValue={numberOfChargePoints}
-                            onChange={setNumberOfChargePoints}
-                        />
-                    </>
+                    <TableInput
+                        className={'w-full h-full'}
+                        headers={["Charge Point", "Power (kW)"]}
+                        onChange={(values: any) => {
+                            console.error('Not implemented')
+                        }}
+                    />
                 )}
             </Group>
             {/* External */}

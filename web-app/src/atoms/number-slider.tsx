@@ -29,15 +29,12 @@ const NumberSlider: React.FC<NumberSliderProps> = ({
             return;
         }
         setValue(num);
+        onChange(num);
     }
     
     useEffect(() => {
         setValue(initialValue);
     }, [initialValue]);
-    
-    useEffect(() => {
-        onChange(value);
-    }, [value, onChange]);
     
     return (
         <div className={`flex flex-col ${className}`}>

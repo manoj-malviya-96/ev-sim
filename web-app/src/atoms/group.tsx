@@ -15,7 +15,7 @@ const Group: React.FC<GroupProps> = ({label, children, layout = 'vertical', clas
             <div
                 className={`flex flex-${layout === 'vertical' ? 'col' : 'row'}
                         gap-4 p-4 rounded-md border border-gray-200 hover:shadow
-                        backdrop-blur-lg w-full h-full
+                        backdrop-blur-lg w-full h-fit
                         ${className}`}>
                 {children}
             </div>

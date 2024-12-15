@@ -12,6 +12,8 @@ export interface UniformChargePoints {
     power: Power_Kw;
 }
 
+export type TableChargePoints = UniformChargePoints[];
+
 
 // Strong types power units - can be better to define interplay like conversion from energy to power
 // but for now, this is good enough I think.
