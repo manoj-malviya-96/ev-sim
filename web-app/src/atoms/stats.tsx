@@ -29,9 +29,13 @@ const computeBgColor = (severity: Severity | undefined) => {
 }
 
 const Stats: React.FC<StatsProps> = ({label, icon, value, info, children, severity = 'good', className = ''}) => {
+    const [showChildren, setShowChildren] = React.useState(true);
+    
+    
     return (
-        <div className={`flex flex-col items-center shadow p-4
-                        rounded-md ${computeBgColor(severity)} bg-opacity-50 ${className}`}>
+        <div className={`flex flex-col items-center shadow p-4 cursor-pointer
+                        rounded-md ${computeBgColor(severity)} bg-opacity-50 ${className}`}
+             onClick={() => setShowChildren(!showChildren)}>
             <span className="text-sm text-gray-800 items-center flex flex-row gap-2">
                 {icon && <i className={icon}/>}
                 {label}
@@ -44,7 +48,7 @@ const Stats: React.FC<StatsProps> = ({label, icon, value, info, children, severi
                 </span>
                 )
             }
-            <div className="flex flex-col gap-2 h-full">
+            <div className={`flex flex-col gap-2 h-full ${showChildren ? 'block' : 'hidden'}`}>
                 {children}
             </div>
         </div>

@@ -17,6 +17,7 @@ const ChargePointContributionPlot = ({eachChargePoint}: { eachChargePoint: Perce
         x: eachChargePoint.map((_, index) => index + 1),
         y: eachChargePoint,
         type: 'bar',
+        hovertemplate: 'charge point: %{x} | % contribution: %{y} <extra></extra>',
         marker: {color: 'rgb(50, 50, 50)'}, // Can be extracted via tailwind.
     };
     return <PlotlyPlotter
@@ -56,8 +57,8 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
                 <Stats label="Total Charge Expected (kwH)" value={totalEnergySpent}
                        icon='fas fa-bolt'/>
                 <Stats label="Max Charge Expected (kwH)" value={actualMaxPower}/>
+                <Stats label="Concurrency" icon='fas fa-money-bills' value={concurrency}/>
             </div>
-            <Stats label="Concurrency" icon='fas fa-money-bills' value={concurrency}/>
             
             <Stats label="Average Charge Point % Contribution"
                    value={averageChargePointContribution ? averageChargePointContribution : 0}
