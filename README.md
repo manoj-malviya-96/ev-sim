@@ -81,8 +81,13 @@ Express with local storage (temp dir of os), and json as datatype.
 
 # API Endpoints
 1. CREATE, UPDATE, READ and DELETE , based on unique id (UUID) for inputs. Its saved right when user clicks on Submit.
-2. Output/Results uses same UUID to store in output table. useful for queries later and merging tables.
-3. Simulation end-point only mocks.
+2. I use this table to populate the initial values, to persist the user settings.
+3. Output/Results uses same UUID to store in output table. useful for queries later and merging tables.
+4. Simulation end-point only mocks.
+
+Example Input: 
+
+`[{"inputId":"b52d6138-1184-49ee-ba2e-273380bf438c","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"f57574c0-ed1c-42b2-b299-76d5b02dc618","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"e12ccbba-0d06-46e5-9929-a14d17461eef","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"a9323f13-d6e6-4368-96f0-f1d3115c1009","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"10b16932-586c-45b1-8d9d-691e66539543","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"1581da06-8127-4d0d-9274-14ee949b9605","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"cb1dbdca-d417-4cbf-a49b-f294b8044df0","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"3ce1da4d-098c-4285-b67a-932b51b25bf7","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"c62560a7-7468-4d43-a588-619a02234173","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"94534420-2ece-4735-bfac-3e18a9221ac1","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"7c49f1ca-dbd0-4122-8920-691a53d005c1","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"9e624303-683c-46e7-8714-edbe9db91e11","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"8896d6f4-2d13-4867-b0a1-b128a3ef83ca","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"535b653a-1b23-4f7f-8754-e0a9902f6051","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},{"inputId":"d7746ea7-c165-4e8e-8a40-69335c36a5a0","uniform_NumChargePoints":20,"uniform_ChargePointPower":11,"carPowerRating":18,"carArrivalProbabilityMultiplier":100},`
 
 # Future;
 1. Moving simulation here instead of UI layer
