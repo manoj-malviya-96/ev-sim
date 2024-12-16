@@ -4,7 +4,10 @@ import random
 from tqdm import tqdm
 
 
-def simulate(num_of_charge_points, charge_point_power_kW=11, interval_min=15):
+def simulate(num_of_charge_points, charge_point_power_kW=11, interval_min=15, seed=None):
+    if seed is not None:
+        random.seed(seed)
+
     num_of_intervals_per_hr = int(60 / interval_min)
     total_intervals_per_year = 365 * 24 * num_of_intervals_per_hr
     ev_consumption_kWh_per_km = 18 / 100
@@ -72,13 +75,12 @@ def simulate(num_of_charge_points, charge_point_power_kW=11, interval_min=15):
 
     return concurrency
 
-# Collect results
 concurrency_results = []
-
 for n in tqdm(range(1, 30)):
     for _ in range(5):  # Repeat simulation 5 times for each n
-        concurrency = simulate(n)
+        concurrency = simulate(n, seed=42)
         concurrency_results.append([n, concurrency])
+
 
 concurrency_results = np.array(concurrency_results)
 unique_n = np.unique(concurrency_results[:, 0])
