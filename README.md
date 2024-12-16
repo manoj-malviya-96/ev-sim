@@ -69,12 +69,30 @@ Simulation Controller            -> Results -> AnalysisPage ---> User
 tailwind + brand-styles, React, Plotly, and typescript.
 
 
-
-
+# Bonus:
+1. UI for multiple type of charging points: Opted for table inputs with tab-switch between simple and advance. Table-input comes with dyanmic rows with + and - features.
+<img width="399" alt="Screenshot 2024-12-16 at 1 31 52" src="https://github.com/user-attachments/assets/b691e541-557f-4b08-9b7e-3ffe6e058314" />
 
 ## Task 2: API Endpoints 
 
 # Technology
-Express 
+Express with local storage (temp dir of os), and json as datatype.
+
+
+# API Endpoints
+1. CREATE, UPDATE, READ and DELETE , based on unique id (UUID) for inputs. Its saved right when user clicks on Submit.
+2. Output/Results uses same UUID to store in output table. useful for queries later and merging tables.
+3. Simulation end-point only mocks.
+
+# Future;
+1. Moving simulation here instead of UI layer
+2. Typescript + transpilign to make it type-safe.
+
+
+
+# How to run this ? 
+
+Run the shell script which starts both server
+`chmod +x start.sh && ./start.sh`
 
 
