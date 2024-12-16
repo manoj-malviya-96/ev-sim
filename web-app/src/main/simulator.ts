@@ -1,7 +1,6 @@
 import {
     ChargePoint,
     ChargePoints,
-    roundTo,
     daysInAYear,
     Distance_km,
     DistanceAndProbability,
@@ -15,6 +14,7 @@ import {
     Percentage,
     Power_Kw,
     Probability,
+    roundTo,
     UniformChargePoints,
     Years
 } from "./types";
@@ -37,6 +37,7 @@ export interface SimulationResults {
     concurrency: number; // Should be a percentage
     eachChargePointContribution: Power_Kw[];
     chargeEventAverage: ChargeEventCount;
+    powerHistoryMat: Power_Kw[][];
 }
 
 export interface SimulationInput {
@@ -372,7 +373,6 @@ export class SimulationController {
         const theoryMaxPower = chargePoints.reduce((acc, cp) => acc + cp.power, 0);
         const eventAverages = getEventAverages(chargingEventsHistory, intervalsInHour);
         
-        
         const results: SimulationResults = {
             totalEnergySpent: roundTo(totalEnergySpent, 1),
             theoreticalMaxPowerUsed: theoryMaxPower,
@@ -380,6 +380,7 @@ export class SimulationController {
             concurrency: roundTo(actualMaxPowerUsed / theoryMaxPower, 1),
             eachChargePointContribution: chargePointSnapshot_Power,
             chargeEventAverage: eventAverages,
+            powerHistoryMat: getPowerHistoryByWeek(powerHistory, intervalsInHour),
         }
         
         this.onFinishedSimulation(results);
@@ -387,4 +388,30 @@ export class SimulationController {
     }
 }
 
+
+function getPowerHistoryByWeek(powerHistory: Power_Kw[], intervalsInAnHour: number){
+    // I want power history matrix
+    // AKA: Daily data and split into Week
+    // 1. Split the power history into days
+    
+    const intervalsInDay = intervalsInAnHour * hoursInADay;
+    const resultsByDay = [];
+    for (let day = 0; day < daysInAYear; day++) {
+        const start = day * intervalsInDay;
+        const end = start + intervalsInDay;
+        const totalPowerUsedInDay = powerHistory.slice(start, end).reduce((acc, power) => acc + power, 0);
+        resultsByDay.push(totalPowerUsedInDay);
+    }
+    
+    const resultsByWeek: Power_Kw[][] = [];
+    for (let week = 0; week < daysInAYear / 7; week++) {
+        const start = week * 7;
+        const end = start + 7;
+        resultsByWeek.push(resultsByDay.slice(start, end));
+    }
+
+    return Array.from({length: 7}, (_, day) =>
+        resultsByWeek.map(week => week[day])
+    );
+}
 

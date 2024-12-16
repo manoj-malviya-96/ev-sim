@@ -33,6 +33,7 @@ function createLayout(
             showgrid: false,
             zeroline: false,
             showline: false,
+            scaleratio: 1,
             showticklabels: !minimalView,
         },
         yaxis: {
@@ -47,6 +48,7 @@ function createLayout(
                 size: textSize,
                 color: textColor,
             },
+            scaleratio: 1,
             showgrid: false,
             zeroline: false,
             showline: false,

@@ -27,6 +27,24 @@ const ChargePointContributionPlot = ({eachChargePoint}: { eachChargePoint: Perce
     />;
 }
 
+const PowerHistoryHeatmap= ({powerMat}: { powerMat: Power_Kw[][] }) => {
+    const dataTrace: Partial<Plotly.Data> = {
+        z: powerMat,
+        type: 'heatmap',
+        colorscale: [[0, 'rgb(255,255,255)'], [1, 'rgb(20,20,20)']],
+        showscale: false,
+        xgap: 1,
+        ygap:1,
+        hovertemplate: 'Max Power : %{z} <extra></extra>',
+    }
+    
+    return <PlotlyPlotter
+        minimalView={true}
+        className={'w-96 h-32'}
+        dataTrace={[dataTrace]}
+    />;
+}
+
 
 const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
     
@@ -75,6 +93,9 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
                     {eachChargePoint.length > 0 && (
                         <ChargePointContributionPlot eachChargePoint={eachChargePoint}/>
                     )}
+                </Stats>
+                <Stats label={'Power Consumption by Day'} value={''}>
+                    <PowerHistoryHeatmap powerMat={results?.powerHistoryMat || []}/>
                 </Stats>
             </div>
             <div className={'flex flex-row h-fit items-center w-full'}>
