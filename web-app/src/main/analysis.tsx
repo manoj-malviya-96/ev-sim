@@ -79,13 +79,13 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
                         max-h-screen overflow-auto flex flex-col gap-4
                         ${className}`}>
             <div className={'grid grid-cols-2 gap-0 '}>
-                <Stats label="Total Charge Expected (KwH)" value={totalEnergySpent}
+                <Stats label="Total Charge Expected" value={totalEnergySpent} units={'KwH'}
                        icon='fas fa-bolt'/>
                 <Stats label="Peak Demand (kW)" value={actualMaxPower}>
-                    <span className="text-sm text-gray-600 text-left w-full">
+                    <span className="text-sm text-gray-600 text-left w-full"> units={'Kw'}
                         Concurrency (Max/Theoretical power) for this setup is {concurrency}</span>
                 </Stats>
-                <Stats label="Mean Power (kW) by Each Charge Point"
+                <Stats label="Mean Power (kW) by Each Charge Point" units={'Kw'}
                        value={averageChargePointContribution ? averageChargePointContribution : 0}
                        icon='fas fa-gas-pump'
                        className={'w-full h-fit'}
@@ -102,15 +102,19 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
                 <span className="text-md font-bold text-gray-500 mr-4"> Average Charging Events </span>
                 <Stats label="Daily Average"
                        className={'border-r-0 rounded-l-lg'}
+                       units={'Kw'}
                         // No overlapping border, can be improved by creating StatsGroup
                        value={eventCount.daily}/>
                 <Stats label="Weekly Average"
+                       units={'Kw'}
                        className={'border-r-0'}
                        value={eventCount.weekly}/>
                 <Stats label="Monthly Average"
+                       units={'Kw'}
                        className={'border-r-0'}
                        value={eventCount.monthly}/>
                 <Stats label="Yearly Average"
+                       units={'Kw'}
                        className={'rounded-r-lg'}
                        value={eventCount.yearly}/>
             </div>

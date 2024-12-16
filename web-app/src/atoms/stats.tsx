@@ -8,6 +8,7 @@ interface StatsProps {
     children?: React.ReactNode;
     severity?: Severity;
     value: number | string | undefined;
+    units?: string;
     className?: string;
 }
 
@@ -27,7 +28,7 @@ const computeTextColor = (severity: Severity | undefined) => {
     }
 };
 
-const _Stats: React.FC<StatsProps> = ({label, icon, value, children, severity = 'good', className = ''}) => {
+const _Stats: React.FC<StatsProps> = ({label, icon, value, children, severity = 'good',units='', className = ''}) => {
     
     return (
         <div
@@ -40,7 +41,8 @@ const _Stats: React.FC<StatsProps> = ({label, icon, value, children, severity = 
                 <span className="text-md">
                     {label}
                 </span>
-                    <span className={`text-2xl font-extrabold ${computeTextColor(severity)}`}>{value}</span>
+                    <span className={`text-2xl font-extrabold ${computeTextColor(severity)}`}>
+                        {`${value} ${units}`}</span>
                 </div>
                 {icon && <i className={`${icon} text-3xl ${computeTextColor(severity)}`}/>}
             </div>
