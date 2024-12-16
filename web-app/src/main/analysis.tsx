@@ -63,11 +63,11 @@ const Analysis: React.FC<AnalysisProps> = ({results, className}) => {
             <div className={'grid grid-cols-2 gap-0 '}>
                 <Stats label="Total Charge Expected (KwH)" value={totalEnergySpent}
                        icon='fas fa-bolt'/>
-                <Stats label="Max Charge Expected (KwH)" value={actualMaxPower}>
+                <Stats label="Peak Demand (kW)" value={actualMaxPower}>
                     <span className="text-sm text-gray-600 text-left w-full">
                         Concurrency (Max/Theoretical power) for this setup is {concurrency}</span>
                 </Stats>
-                <Stats label="Mean Power by Each Charge Point"
+                <Stats label="Mean Power (kW) by Each Charge Point"
                        value={averageChargePointContribution ? averageChargePointContribution : 0}
                        icon='fas fa-gas-pump'
                        className={'w-full h-fit'}

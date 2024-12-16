@@ -73,6 +73,22 @@ app.get("/api/results", (req, res) => {
     res.json(database.results);
 });
 
+
+app.post("/api/simulate",(req, res) => {
+    const {inputs} = req.body; // I wish i can move this to TS, to make it strong typed
+
+    // Mock simulation
+    const runSimulation = (input) => {
+        return {
+            id: input.id,
+            result: Math.random() * 100,
+        };
+    }
+    database.results.push(runSimulation(inputs));
+    writeData(database);
+    res.json(database.results);
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
