@@ -1,5 +1,12 @@
-# EV Charging Simulation Project
+# EV Charging Simulation
 -----
+
+## Technologies Used:
+- Express
+- React
+- Tailwind
+- Typescript
+
 
 ## Problem:
 
