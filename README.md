@@ -85,7 +85,7 @@ tailwind + brand-styles, React, Plotly, and typescript.
 
 2. Yes, i did connect UI with the quick version of task-1 in JS.
 
-## Task 2: API 
+## API 
 
 ### Technology
 Express with local storage (temp dir of os), and json as datatype.
